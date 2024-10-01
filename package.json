@@ -1,0 +1,12 @@
+{
+  "name": "dream-voyage",
+  "version": "1.0.0",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "concurrently": "^5.1.0"
+  }
+}
