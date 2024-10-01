@@ -25,7 +25,7 @@ const userSchema = new Schema({
   },
 });
 
-userSchema.pre("save", async (next) => {
+userSchema.pre("save", async function (next) {
   if (this.isNew || this.isModified("password")) {
     const saltRounds = 10;
     this.password = await bcyrpt.hash(this.password, saltRounds);
@@ -35,8 +35,8 @@ userSchema.pre("save", async (next) => {
 });
 
 
-userSchema.methods.isCorrectPassword = async (password) =>{
-    return await bcyrpt.compare(password, this.password);
+userSchema.methods.isCorrectPassword = async function (password) {
+    return await bcrypt.compare(password, this.password);
 }
 
 const User = model('User', userSchema)
