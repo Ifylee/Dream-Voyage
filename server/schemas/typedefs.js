@@ -12,7 +12,7 @@ type Category {
     summary:String
     description:String
     img:String
-    price: Int
+    price: Float
     category: Category
 
 }

@@ -20,7 +20,7 @@ const resolvers = {
       return Trip.find();
     },
     oneTrip: async (parent, { _id }) => {
-      return Trip.findById(id);
+      return Trip.findById(_id);
     },
   },
 
@@ -120,11 +120,11 @@ const resolvers = {
       return trips;
     },
   },
-  // Trip: {
-  //   category: async (root) => {
-  //     return await Category.findById(root.category);
-  //   },
-  // },
+  Trip: {
+    category: async (root) => {
+      return await Category.findById(root.category);
+    },
+  },
 };
 
 module.exports = resolvers;
