@@ -3,6 +3,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { Grid2 as Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import Auth from '../../utils/auth';
 
 export const Nav = () => {
   // This state will indicate which tab is selected
@@ -90,9 +91,18 @@ export const Nav = () => {
               label="Trip Wish List"
               sx={{ minWidth: 80, padding: "6px 12px", fontSize: ".850rem" }} // Adjust the size
             />
+          
+            {Auth.loggedIn() ? (
+            <Tab value="logout" label="Logout" onClick={handleLogout} />
+            ) : (
+              <Tab value="login" label="Login" href="/login" />
+            )}
+            
           </Tabs>
         </Grid>
       </Grid>
     </Grid>
   );
 };
+
+export default Nav;
