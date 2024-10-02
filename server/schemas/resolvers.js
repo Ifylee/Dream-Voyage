@@ -16,12 +16,12 @@ const resolvers = {
     categories: async (parent, args) => {
       return Category.find();
     },
-    allTrips: async (parent, args)=>{
+    allTrips: async (parent, args) => {
       return Trip.find();
     },
-    oneTrip: async(parent, {id}) =>{
+    oneTrip: async (parent, { _id }) => {
       return Trip.findById(id);
-    }
+    },
   },
   Mutation: {
     addUser: async (parent, args) => {
@@ -49,6 +49,51 @@ const resolvers = {
         const token = signToken(user);
 
         return { user, token };
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    boughtTrip: async (parent, { _id }, context) => {
+      try {
+        // Find the user by ID and push the trip _id to the purchased array
+        const updatedUser = await User.findByIdAndUpdate(
+          context.user._id,
+          { $push: { purchased: _id } },
+          { new: true } // Return the updated user document
+        );
+
+        // Return the updated user or a success message
+        return updatedUser;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    addToList: async (parent, { _id }, context) => {
+      try {
+        // Find the user by ID and push the trip _id to the purchased array
+        const addWish = await User.findByIdAndUpdate(
+          context.user._id,
+          { $addToSet: { wishList: _id } },
+          { new: true } // Return the updated user document
+        );
+
+        // Return the updated user or a success message
+        return addWish;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    deleteFromList: async (parent, { _id }, context) => {
+      try {
+        // Find the user by ID and push the trip _id to the purchased array
+        const deleteWish = await User.findByIdAndUpdate(
+          context.user._id,
+          { $pull: { wishList: _id } },
+          { new: true } // Return the updated user document
+        );
+
+        // Return the updated user or a success message
+        return deleteWish;
       } catch (error) {
         console.log(error);
       }

@@ -42,7 +42,7 @@ type Query {
     currentUser:User
     categories:[Category]
     allTrips:[Trip]
-    oneTrip(id:ID):Trip
+    oneTrip(_id:ID!):Trip
 
 }
 
@@ -52,11 +52,11 @@ type Mutation {
 
     login(email:String!, password:String!):Auth
 
-    boughtTrip(id:ID):User
+    boughtTrip(_id:ID!):User
 
-    addToList(id:ID!):User
+    addToList(_id:ID!):User
 
-    deleteFromList(id:ID!):User
+    deleteFromList(_id:ID!):User
 
 
 }
