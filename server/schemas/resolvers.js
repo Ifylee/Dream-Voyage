@@ -23,6 +23,7 @@ const resolvers = {
       return Trip.findById(id);
     },
   },
+
   Mutation: {
     addUser: async (parent, args) => {
       try {
@@ -99,6 +100,31 @@ const resolvers = {
       }
     },
   },
+  User: {
+    purchased: async (root) => {
+      if (!root.purchased) return [];
+      // Fetch all trips at once and populate the category field
+      const trips = await Trip.find({ _id: { $in: root.purchased } }).populate(
+        "category"
+      );
+      return trips;
+    },
+
+    // Resolver for wishList trips
+    wishList: async (root) => {
+      if (!root.wishList) return [];
+      // Fetch all trips at once and populate the category field
+      const trips = await Trip.find({ _id: { $in: root.wishList } }).populate(
+        "category"
+      );
+      return trips;
+    },
+  },
+  // Trip: {
+  //   category: async (root) => {
+  //     return await Category.findById(root.category);
+  //   },
+  // },
 };
 
 module.exports = resolvers;
