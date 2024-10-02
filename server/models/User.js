@@ -17,12 +17,15 @@ const userSchema = new Schema({
     type: String,
     required: true,
     unique: true,
+    index: true,
   },
   password: {
     type: String,
     required: true,
     minlength: 5,
   },
+  purchased: [{ type: Schema.Types.ObjectId, ref: "Trip" }],
+  wishList: [{ type: Schema.Types.ObjectId, ref: "Trip" }],
 });
 
 userSchema.pre("save", async function (next) {
@@ -34,11 +37,10 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-
 userSchema.methods.isCorrectPassword = async function (password) {
-    return await bcrypt.compare(password, this.password);
-}
+  return await bcrypt.compare(password, this.password);
+};
 
-const User = model('User', userSchema)
+const User = model("User", userSchema);
 
 module.exports = User;

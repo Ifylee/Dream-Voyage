@@ -7,6 +7,13 @@ type User {
     email: String
 }
 
+type Trip {
+
+    id:ID
+    
+
+}
+
 type Auth {
     token:ID
     user:User
