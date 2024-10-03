@@ -32,7 +32,7 @@ const client = new ApolloClient({
 function App() {
   return (
     <ApolloProvider client={client}>
-      <GlobalStateProvider> {/* Wraps the Outlet component in the GlobalStateProvider */}
+      <GlobalStateProvider> {/* Wrap the Outlet component in the GlobalStateProvider */}
         <Nav />
         <Outlet />
       </GlobalStateProvider>
