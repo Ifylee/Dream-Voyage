@@ -20,7 +20,7 @@ export const reducer = (state, action) => {
     case SET_TRIPS:
       return {
         ...state,
-        trips: [action.payload], // Set the entire trips array
+        trips: action.payload, // Set the entire trips array
       };
     case ADD_TRIP_TO_CART:
       return {
