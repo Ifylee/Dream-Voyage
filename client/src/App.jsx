@@ -8,8 +8,7 @@ import {
   createHttpLink,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import { GlobalStateProvider } from "./context/GlobalState"; // Import the GlobalStateProvider
-
+import { GlobalStateProvider } from "./utils/GlobalState";
 const httpLink = createHttpLink({
   uri: "/graphql",
 });
