@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Grid2 from '@mui/material/Grid2';
-import TripCard from './TripCard'; // Adjust the path as needed
-import axios from 'axios'; // Make sure to install axios
+import TripCard from './components/TripCard'; 
+import axios from 'axios'; // i installed this in the client/package.json
 
 export default function TripList() {
   const [trips, setTrips] = useState([]);
