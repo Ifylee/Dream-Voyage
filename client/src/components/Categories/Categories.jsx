@@ -29,7 +29,7 @@ export const Categories = () => {
 
   return (
     <div key="30">
-      <h2>Choose a Region:</h2>
+      <h3>Choose a Region:</h3>
       <button
         onClick={() => {
           handleClick("");

@@ -19,8 +19,7 @@ export const Nav = () => {
   const routes = {
     one: "/",
     two: "/",
-    three: "/",
-    four: "/",
+    three: "/login",
   };
 
   const handleChange = (event, newValue) => {
@@ -85,9 +84,9 @@ export const Nav = () => {
               sx={{ minWidth: 80, padding: "6px 12px", fontSize: ".850rem" }} // Adjust the size
             />
             {Auth.loggedIn() ? (
-            <Tab value="logout" label="Logout" onClick={handleLogout} />
+            <Tab value="logout" label="Logout" onClick={()=>Auth.logout()} />
             ) : (
-              <Tab value="login" label="Login" href="/login" />
+              <Tab  label="Login" value="three" />
             )}
             
           </Tabs>

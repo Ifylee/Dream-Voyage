@@ -1,6 +1,5 @@
 import { Outlet } from "react-router-dom";
 import Nav from "./components/Nav/Nav";
-import { Home } from "./pages/Home/Home";
 import {
   ApolloClient,
   ApolloProvider,
@@ -32,11 +31,8 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <GlobalStateProvider>
-        {" "}
-        {/* Wrap the Outlet component in the GlobalStateProvider */}
         <Nav />
         <Outlet />
-        <Home/>
       </GlobalStateProvider>
     </ApolloProvider>
   );
