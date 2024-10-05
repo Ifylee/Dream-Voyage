@@ -1,15 +1,15 @@
-// client/src/pages/Login/Login.jsx
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { LOGIN_USER } from "../../utils/mutation";
 import Auth from "../../utils/auth";
-import { Link } from "react-router-dom"; // Import Link
+import { Link } from "react-router-dom";
 import { useGlobalState } from "../../utils/GlobalState";
+import { TextField, Button, Typography, Container, Box } from '@mui/material';
+import '../../assets/styles/AuthForm.css';
 
 const Login = () => {
   const [formState, setFormState] = useState({ email: "", password: "" });
   const [state, dispatch] = useGlobalState();
-  console.log(state);
   const [login, { error }] = useMutation(LOGIN_USER);
 
   const handleChange = (event) => {
@@ -33,31 +33,54 @@ const Login = () => {
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      <form onSubmit={handleFormSubmit}>
-        <input
+    <Container className="auth-container">
+      <video autoPlay loop muted className="background-video">
+        <source src="/src/assets/videos/login-background.mp4" type="video/mp4" />
+      </video>
+      <Box className="auth-form" component="form" onSubmit={handleFormSubmit} noValidate>
+        <Typography variant="h4" component="h2" gutterBottom>
+          Login
+        </Typography>
+        <TextField
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
+          id="email"
+          label="Email Address"
           name="email"
-          type="email"
+          autoComplete="email"
+          autoFocus
           value={formState.email}
           onChange={handleChange}
-          placeholder="Email"
         />
-        <input
+        <TextField
+          variant="outlined"
+          margin="normal"
+          required
+          fullWidth
           name="password"
+          label="Password"
           type="password"
+          id="password"
+          autoComplete="current-password"
           value={formState.password}
           onChange={handleChange}
-          placeholder="Password"
         />
-        <br></br>
-        <button type="submit">Submit</button>
-        <br></br>
-        <br></br>
-        <Link to="/signup">No account? Signup</Link>
-      </form>
-      {error && <div> Login failed </div>}
-    </div>
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          color="primary"
+        >
+          Submit
+        </Button>
+        <Link to="/signup" style={{ textDecoration: 'none', marginTop: '10px', display: 'block', textAlign: 'center' }}>
+          No account? Signup
+        </Link>
+        {error && <Typography color="error">Login failed</Typography>}
+      </Box>
+    </Container>
   );
 };
 
