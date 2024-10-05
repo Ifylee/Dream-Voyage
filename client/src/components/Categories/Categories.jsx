@@ -9,7 +9,7 @@ export const Categories = () => {
   const { categories } = state;
 
   const { loading, data: categoryData } = useQuery(QUERY_CATEGORY);
-  console.log(categoryData);
+  console.log(state);
 
   useEffect(() => {
     if (categoryData) {
@@ -28,13 +28,20 @@ export const Categories = () => {
   };
 
   return (
-    <div>
+    <div key="30">
       <h2>Choose a Region:</h2>
+      <button
+        onClick={() => {
+          handleClick("");
+        }}
+      >
+        All Trips
+      </button>
       {categories.map((item) => (
         <button
           key={item._id}
           onClick={() => {
-            handleClick(item._id);
+            handleClick(item.id);
           }}
         >
           {item.name}

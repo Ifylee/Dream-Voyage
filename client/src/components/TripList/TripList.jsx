@@ -9,7 +9,7 @@ import { useGlobalState } from "../../utils/GlobalState";
 export const TripList = () => {
   const [state, dispatch] = useGlobalState();
 
-  const { trips } = state;
+  const { trips, currentCategory } = state;
 
   const { data, loading, error } = useQuery(QUERY_ALL_TRIPS);
 
@@ -22,9 +22,19 @@ export const TripList = () => {
     }
   }, [data, loading, dispatch]);
 
+  function filterProducts() {
+    if (!currentCategory) {
+      return trips;
+    }
+
+    return trips.filter(
+      (product) => product.category.id === currentCategory
+    );
+  }
+
   return (
-    <Grid2 container spacing={2}>
-      {trips.map((trip) => (
+    <Grid2 container spacing={2} key="40">
+      {filterProducts().map((trip) => (
         <Grid2 item xs={12} sm={6} md={4} key={trip._id}>
           <TripCard
             title={trip.title}

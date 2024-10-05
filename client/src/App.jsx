@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import Nav from "./components/Nav/Nav";
-import { TripList } from "./components/TripList/TripList";
+import { Home } from "./pages/Home/Home";
 import {
   ApolloClient,
   ApolloProvider,
@@ -34,9 +34,9 @@ function App() {
       <GlobalStateProvider>
         {" "}
         {/* Wrap the Outlet component in the GlobalStateProvider */}
-        <TripList/>
         <Nav />
         <Outlet />
+        <Home/>
       </GlobalStateProvider>
     </ApolloProvider>
   );
