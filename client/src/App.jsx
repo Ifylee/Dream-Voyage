@@ -1,4 +1,3 @@
-
 import { Outlet } from "react-router-dom";
 import Nav from "./components/Nav/Nav";
 import {
@@ -8,8 +7,7 @@ import {
   createHttpLink,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import { GlobalStateProvider } from "./context/GlobalState"; // Import the GlobalStateProvider
-
+import { GlobalStateProvider } from "./utils/GlobalState";
 const httpLink = createHttpLink({
   uri: "/graphql",
 });
@@ -32,7 +30,7 @@ const client = new ApolloClient({
 function App() {
   return (
     <ApolloProvider client={client}>
-      <GlobalStateProvider> {/* Wrap the Outlet component in the GlobalStateProvider */}
+      <GlobalStateProvider>
         <Nav />
         <Outlet />
       </GlobalStateProvider>
