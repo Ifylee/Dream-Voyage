@@ -84,14 +84,6 @@ export const Nav = () => {
               label="My Trips"
               sx={{ minWidth: 80, padding: "6px 12px", fontSize: ".850rem" }} // Adjust the size
             />
-            <Tab
-              // When the user selects this value this is what will save to the state
-              // and indicate which route to send to use
-              value="three"
-              label="Trip Wish List"
-              sx={{ minWidth: 80, padding: "6px 12px", fontSize: ".850rem" }} // Adjust the size
-            />
-          
             {Auth.loggedIn() ? (
             <Tab value="logout" label="Logout" onClick={handleLogout} />
             ) : (

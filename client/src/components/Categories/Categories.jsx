@@ -2,13 +2,14 @@ import { useEffect } from "react";
 import { useQuery } from "@apollo/client";
 import { useGlobalState } from "../../utils/GlobalState";
 import { SET_CATEGORIES, UPDATE_CURRENT_CATEGORY } from "../../utils/actions";
-import { QUERY_CATEGORIES } from "../../utils/queries";
+import { QUERY_CATEGORY } from "../../utils/query";
 
-function Categories() {
+export const Categories = () => {
   const [state, dispatch] = useGlobalState();
   const { categories } = state;
 
-  const { loading, data: categoryData } = useQuery(QUERY_CATEGORIES);
+  const { loading, data: categoryData } = useQuery(QUERY_CATEGORY);
+  console.log(categoryData);
 
   useEffect(() => {
     if (categoryData) {
@@ -41,6 +42,4 @@ function Categories() {
       ))}
     </div>
   );
-}
-
-export default Categories;
+};

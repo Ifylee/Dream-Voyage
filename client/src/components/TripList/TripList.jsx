@@ -1,23 +1,26 @@
-import React, { useEffect, useState } from 'react';
-import Grid2 from '@mui/material/Grid2';
-import TripCard from './components/TripCard'; 
-import axios from 'axios'; // i installed this in the client/package.json
+import React, { useEffect, useState } from "react";
+import Grid2 from "@mui/material/Grid2";
+import { TripCard } from "../TripCard/TripCard";
+import { QUERY_ALL_TRIPS } from "../../utils/query";
+import { useQuery } from "@apollo/client";
+import { SET_TRIPS } from "../../utils/actions";
+import { useGlobalState } from "../../utils/GlobalState";
 
-export default function TripList() {
-  const [trips, setTrips] = useState([]);
+export const TripList = () => {
+  const [state, dispatch] = useGlobalState();
+
+  const { trips } = state;
+
+  const { data, loading, error } = useQuery(QUERY_ALL_TRIPS);
 
   useEffect(() => {
-    const fetchTrips = async () => {
-      try {
-        const response = await axios.get('/api/trips'); // im not sure what the api endpoint is
-        setTrips(response.data);
-      } catch (error) {
-        console.error("Error fetching trips", error);
-      }
-    };
-
-    fetchTrips();
-  }, []);
+    if (data) {
+      dispatch({
+        type: SET_TRIPS,
+        payload: data.allTrips,
+      });
+    }
+  }, [data, loading, dispatch]);
 
   return (
     <Grid2 container spacing={2}>
@@ -34,5 +37,4 @@ export default function TripList() {
       ))}
     </Grid2>
   );
-}
-
+};
