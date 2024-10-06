@@ -36,6 +36,7 @@ export const TripList = () => {
       {filterProducts().map((trip) => (
         <Grid2 xs={12} sm={6} md={4} key={trip.id}>
           <TripCard
+            id={trip.id}
             title={trip.title}
             summary={trip.summary}
             description={trip.description}
