@@ -55,8 +55,13 @@ To get a local copy up and running, follow these steps:
     ```sh
     npm run seed
     ```
+    
+5. **Build the client**:
+     ```sh
+     npm run build
+     ```  
 
-5. **Start the development server**:
+6. **Start the development server**:
     ```sh
     npm run develop
     ```
