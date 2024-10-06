@@ -27,15 +27,14 @@ export const TripList = () => {
       return trips;
     }
 
-    return trips.filter(
-      (product) => product.category.id === currentCategory
-    );
+    return trips.filter((product) => product.category.id === currentCategory);
   }
+  console.log(trips);
 
   return (
-    <Grid2 container spacing={2} key="40">
+    <Grid2 container spacing={2}>
       {filterProducts().map((trip) => (
-        <Grid2 item xs={12} sm={6} md={4} key={trip._id}>
+        <Grid2 xs={12} sm={6} md={4} key={trip.id}>
           <TripCard
             title={trip.title}
             summary={trip.summary}

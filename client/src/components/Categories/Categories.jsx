@@ -39,7 +39,7 @@ export const Categories = () => {
       </button>
       {categories.map((item) => (
         <button
-          key={item._id}
+          key={item.id}
           onClick={() => {
             handleClick(item.id);
           }}
