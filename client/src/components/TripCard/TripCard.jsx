@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useNavigate } from "react-router-dom"; 
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
@@ -6,14 +7,12 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import Collapse from "@mui/material/Collapse";
-import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import { red } from "@mui/material/colors";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -26,21 +25,24 @@ const ExpandMore = styled((props) => {
   transform: (props) => (props.expand ? "rotate(180deg)" : "rotate(0deg)"),
 }));
 
-export const TripCard = ({ title, summary, description, img, price }) => {
+export const TripCard = ({ id, title, summary, description, img, price }) => {
   const [expanded, setExpanded] = React.useState(false);
+
+ 
+  const navigate = useNavigate();
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
+
+  const handleImageClick = () => {
+    navigate(`/trip/${id}`); 
+  };
+
   return (
     <Card sx={{ maxWidth: 345 }}>
-      <CardHeader
-        avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="trip">
-            {title[0]}
-          </Avatar>
-        }
+      <CardHeader 
         action={
           <IconButton aria-label="settings">
             <MoreVertIcon />
@@ -49,11 +51,14 @@ export const TripCard = ({ title, summary, description, img, price }) => {
         title={title}
         subheader={`Price: $${price.toFixed(2)}`}
       />
+
       <CardMedia
         component="img"
         height="194"
         src={`/images/${img}`}
         alt={title}
+        onClick={handleImageClick} 
+        style={{ cursor: 'pointer' }} 
       />
       <CardContent>
         <Typography variant="body2" sx={{ color: "text.secondary" }}>
@@ -65,7 +70,7 @@ export const TripCard = ({ title, summary, description, img, price }) => {
           <FavoriteIcon />
         </IconButton>
         <IconButton aria-label="share">
-          <ShareIcon />
+          <ShoppingCartIcon />
         </IconButton>
         <ExpandMore
           expand={expanded}
