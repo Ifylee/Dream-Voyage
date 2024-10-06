@@ -15,6 +15,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useGlobalState } from "../../utils/GlobalState";
+import { Link } from "react-router-dom";
 
 import { useMutation } from "@apollo/client";
 import { ADD_WISH_LIST } from "../../utils/mutation";
@@ -74,12 +75,15 @@ export const TripCard = ({ title, summary, description, img, price, id }) => {
         title={title}
         subheader={`Price: $${price.toFixed(2)}`}
       />
+      <Link to={`/trip/${id}`}>
       <CardMedia
         component="img"
         height="194"
         src={`/images/${img}`}
         alt={title}
       />
+      </Link>
+    
       <CardContent>
         <Typography variant="body2" sx={{ color: "text.secondary" }}>
           {summary}

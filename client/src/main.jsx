@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./pages/Login/Login.jsx";
 import Signup from "./pages/Signup/Signup.jsx";
 import { Home } from "./pages/Home/Home.jsx";
+import { SingleTrip } from "./pages/One Trip/SingleTrip.jsx";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,11 @@ const router = createBrowserRouter([
         path: "/signup",
         element: <Signup />,
       },
+      {
+        path:"/trip/:id",
+        element:<SingleTrip/>
+
+      }
     ],
   },
 ]);
