@@ -14,9 +14,11 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { useGlobalState } from "../../utils/GlobalState";
 
 import { useMutation } from "@apollo/client";
 import { ADD_WISH_LIST } from "../../utils/mutation";
+import { ADD_TRIP_TO_CART } from "../../utils/actions";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -31,11 +33,20 @@ const ExpandMore = styled((props) => {
 
 // eslint-disable-next-line react/prop-types
 export const TripCard = ({ title, summary, description, img, price, id }) => {
+  const [state, dispatch] = useGlobalState();
+  console.log(state);
   const [addList, { error }] = useMutation(ADD_WISH_LIST);
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
+  };
+
+  const addToCart = async () => {
+    dispatch({
+      type: ADD_TRIP_TO_CART,
+      payload: { title, img, price, id },
+    });
   };
 
   const addWishTrip = async () => {
@@ -46,7 +57,6 @@ export const TripCard = ({ title, summary, description, img, price, id }) => {
       console.log(error);
     }
   };
-
 
   return (
     <Card sx={{ maxWidth: 345 }}>
@@ -79,7 +89,7 @@ export const TripCard = ({ title, summary, description, img, price, id }) => {
         <IconButton aria-label="add to favorites" onClick={addWishTrip}>
           <FavoriteIcon />
         </IconButton>
-        <IconButton aria-label="share">
+        <IconButton aria-label="share" onClick={addToCart}>
           <ShoppingCartIcon />
         </IconButton>
         <ExpandMore
