@@ -215,7 +215,7 @@ export const TripCard = ({ trip, title, summary, description, img, price, handle
           </Typography>
         </CardContent>
         <CardActions disableSpacing>
-          <IconButton aria-label="add to favorites" onClick={addList}>
+          <IconButton aria-label="add to favorites" onClick={addWishTrip}>
             <FavoriteIcon />
           </IconButton>
           <IconButton aria-label="share" onClick={addToCart}>
