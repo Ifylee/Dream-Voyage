@@ -2,11 +2,9 @@ const db = require("../config/connection");
 const { User, Trip, Category } = require("../models");
 
 db.once("open", async () => {
-
-    await Trip.deleteMany({});
-    await User.deleteMany({});
-    await Category.deleteMany({});
-
+  await Trip.deleteMany({});
+  await User.deleteMany({});
+  await Category.deleteMany({});
 
   const categories = await Category.insertMany([
     { name: "Africa" },
@@ -21,7 +19,8 @@ db.once("open", async () => {
   const trips = await Trip.insertMany([
     {
       title: "Lagos, Nigeria",
-      summary: "This is a test",
+      summary:
+        "Experience the vibrant culture of Lagos, Nigeria with a 7-day trip including city tours, local cuisine, and stunning beaches.",
       description:
         "Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.",
       img: "lagos.jpg",

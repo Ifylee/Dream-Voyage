@@ -5,6 +5,7 @@ import { SET_CATEGORIES, UPDATE_CURRENT_CATEGORY } from "../../utils/actions";
 import { QUERY_CATEGORY } from "../../utils/query";
 import Container from "@mui/material/Container"; // Import Container
 import Button from "@mui/material/Button"; // Import Button for consistent styling
+
 export const Categories = () => {
   const [state, dispatch] = useGlobalState();
   const { categories } = state;
