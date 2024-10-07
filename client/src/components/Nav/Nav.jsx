@@ -21,6 +21,7 @@ export const Nav = () => {
     one: "/",
     two: "/",
     three: "/login",
+    logout:'/'
   };
 
   const handleChange = (event, newValue) => {

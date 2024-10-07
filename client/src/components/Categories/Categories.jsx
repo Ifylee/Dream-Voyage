@@ -7,7 +7,7 @@ import Container from "@mui/material/Container"; // Import Container
 import Button from "@mui/material/Button"; // Import Button for consistent styling
 export const Categories = () => {
   const [state, dispatch] = useGlobalState();
-  const { categories, currentCategory } = state;
+  const { categories } = state;
   const { loading, data: categoryData } = useQuery(QUERY_CATEGORY);
   console.log(state);
   useEffect(() => {
