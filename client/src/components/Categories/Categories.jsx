@@ -9,10 +9,8 @@ import Button from "@mui/material/Button"; // Import Button for consistent styli
 export const Categories = () => {
   const [state, dispatch] = useGlobalState();
   const { categories } = state;
-
   const { loading, data: categoryData } = useQuery(QUERY_CATEGORY);
   console.log(state);
-
   useEffect(() => {
     if (categoryData) {
       dispatch({
@@ -21,30 +19,28 @@ export const Categories = () => {
       });
     }
   }, [categoryData, loading, dispatch]);
-
   const handleClick = (id) => {
     dispatch({
       type: UPDATE_CURRENT_CATEGORY,
       payload: id,
     });
   };
-
   return (
     <Container
       maxWidth="lg"
       sx={{ display: "flex", justifyContent: "center", marginBottom: 2, marginTop: 2 }}
     >
-      <div key="30">
+      <div>
         <Button
           variant="contained"
           onClick={() => {
             handleClick("");
           }}
-          sx={{ 
-            margin: 1, 
-            backgroundColor: "#007BFF", 
-            color: "#FFFFFF", 
-            '&:hover': { backgroundColor: '#0056b3' } 
+          sx={{
+            margin: 1,
+            backgroundColor: "#007BFF",
+            color: "#FFFFFF",
+            '&:hover': { backgroundColor: '#0056B3' }
           }}
         >
           All Trips
@@ -56,11 +52,11 @@ export const Categories = () => {
             onClick={() => {
               handleClick(item.id);
             }}
-            sx={{ 
-              margin: 1, 
-              backgroundColor: "#28A745", 
-              color: "#FFFFFF", 
-              '&:hover': { backgroundColor: '#218838' } 
+            sx={{
+              margin: 1,
+              backgroundColor: "#28A745",
+              color: "#FFFFFF",
+              '&:hover': { backgroundColor: '#218838' }
             }}
           >
             {item.name}

@@ -3,7 +3,8 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { Grid2 as Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import Auth from '../../utils/auth';
+import Auth from "../../utils/auth";
+import { FullScreenDialog } from "../Cart/cart";
 
 export const Nav = () => {
   // This state will indicate which tab is selected
@@ -20,6 +21,7 @@ export const Nav = () => {
     one: "/",
     two: "/",
     three: "/login",
+    logout:'/'
   };
 
   const handleChange = (event, newValue) => {
@@ -44,19 +46,20 @@ export const Nav = () => {
         color: "#333",
       }}
     >
-      <Grid container size={12}  alignItems={"center"} marginRight={"15px"}>
-        <Grid size={{ xs: 6, md: 9, sm: 7 }}>
+      <Grid container size={12} alignItems={"center"} justifyContent ={"space-between"} marginRight={"15px"}>
+        <Grid size={{ xs: 4, md: 2, sm: 4 }}>
           {/* This will hold the name in the navbar at the far left */}
           <h2
             style={{
               fontFamily: "'Playfair Display', sans-serif",
               fontWeight: 400,
             }}
+            onClick={()=>navigate('/')}
           >
             Dream Voyage
           </h2>
         </Grid>
-        <Grid size={{ md: 3, xs: 6, sm: 5 }}>
+        <Grid size={{ md: 3, xs: 4, sm: 4 }}>
           {/* Tabs is a Material UI component that will help with the 
           routing of the different endpoints */}
           <Tabs
@@ -64,7 +67,7 @@ export const Nav = () => {
             value={value}
             // This will hanlde the change of pages when a tab is selected
             onChange={handleChange}
-            variant="scrollable"
+            // variant="scrollable"
             scrollButtons="auto"
             aria-label="scrollable auto tabs example"
           >
@@ -84,12 +87,20 @@ export const Nav = () => {
               sx={{ minWidth: 80, padding: "6px 12px", fontSize: ".850rem" }} // Adjust the size
             />
             {Auth.loggedIn() ? (
-            <Tab value="logout" label="Logout" onClick={()=>Auth.logout()} />
+              <Tab
+                value="logout"
+                label="Logout"
+                onClick={() => Auth.logout()}
+              />
             ) : (
-              <Tab  label="Login" value="three" />
+              <Tab label="Login" value="three" />
             )}
-            
           </Tabs>
+        </Grid>
+        <Grid container justifyContent={"end"} sx={{paddingRight:"20px"}}>
+          <Grid size={{ md: 6, xs:4, sm:4 }}>
+            <FullScreenDialog />
+          </Grid>
         </Grid>
       </Grid>
     </Grid>
