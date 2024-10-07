@@ -3,6 +3,8 @@ import { useQuery } from "@apollo/client";
 import { useGlobalState } from "../../utils/GlobalState";
 import { SET_CATEGORIES, UPDATE_CURRENT_CATEGORY } from "../../utils/actions";
 import { QUERY_CATEGORY } from "../../utils/query";
+import Container from "@mui/material/Container"; // Import Container
+import Button from "@mui/material/Button"; // Import Button for consistent styling
 
 export const Categories = () => {
   const [state, dispatch] = useGlobalState();
@@ -28,25 +30,43 @@ export const Categories = () => {
   };
 
   return (
-    <div key="30">
-      <h3>Choose a Region:</h3>
-      <button
-        onClick={() => {
-          handleClick("");
-        }}
-      >
-        All Trips
-      </button>
-      {categories.map((item) => (
-        <button
-          key={item._id}
+    <Container
+      maxWidth="lg"
+      sx={{ display: "flex", justifyContent: "center", marginBottom: 2, marginTop: 2 }}
+    >
+      <div key="30">
+        <Button
+          variant="contained"
           onClick={() => {
-            handleClick(item.id);
+            handleClick("");
+          }}
+          sx={{ 
+            margin: 1, 
+            backgroundColor: "#007BFF", 
+            color: "#FFFFFF", 
+            '&:hover': { backgroundColor: '#0056b3' } 
           }}
         >
-          {item.name}
-        </button>
-      ))}
-    </div>
+          All Trips
+        </Button>
+        {categories.map((item) => (
+          <Button
+            key={item._id}
+            variant="contained"
+            onClick={() => {
+              handleClick(item.id);
+            }}
+            sx={{ 
+              margin: 1, 
+              backgroundColor: "#28A745", 
+              color: "#FFFFFF", 
+              '&:hover': { backgroundColor: '#218838' } 
+            }}
+          >
+            {item.name}
+          </Button>
+        ))}
+      </div>
+    </Container>
   );
 };
