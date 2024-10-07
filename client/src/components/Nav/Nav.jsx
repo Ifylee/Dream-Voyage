@@ -53,6 +53,7 @@ export const Nav = () => {
               fontFamily: "'Playfair Display', sans-serif",
               fontWeight: 400,
             }}
+            onClick={()=>navigate('/')}
           >
             Dream Voyage
           </h2>

@@ -39,26 +39,6 @@ export const SingleTrip = () => {
             price={trip.price}
           />
         </Grid>
-        <Grid xs={12} sm={6} md={4} key={trip.id}>
-          <TripCard
-            id={trip.id}
-            title={trip.title}
-            summary={trip.summary}
-            description={trip.description}
-            img={trip.img}
-            price={trip.price}
-          />
-        </Grid>
-        <Grid xs={12} sm={6} md={4} key={trip.id}>
-          <TripCard
-            id={trip.id}
-            title={trip.title}
-            summary={trip.summary}
-            description={trip.description}
-            img={trip.img}
-            price={trip.price}
-          />
-        </Grid>
       </Grid>
     </div>
   );
