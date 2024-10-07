@@ -3,6 +3,7 @@ import { useQuery } from "@apollo/client";
 import { useGlobalState } from "../../utils/GlobalState";
 import { SET_CATEGORIES, UPDATE_CURRENT_CATEGORY } from "../../utils/actions";
 import { QUERY_CATEGORY } from "../../utils/query";
+import { Container } from "@mui/material";
 
 export const Categories = () => {
   const [state, dispatch] = useGlobalState();
@@ -28,25 +29,31 @@ export const Categories = () => {
   };
 
   return (
-    <div key="30">
-      <h3>Choose a Region:</h3>
-      <button
-        onClick={() => {
-          handleClick("");
-        }}
-      >
-        All Trips
-      </button>
-      {categories.map((item) => (
+    <Container maxWidth="lg" sx={{ display: 'flex', justifyContent: 'center', marginBottom: 2, marginTop: 2 }}>
+      <div key="30">
+        
         <button
-          key={item._id}
+          variant="contained"
           onClick={() => {
-            handleClick(item.id);
+            handleClick("");
           }}
+          sx={{ margin: 1 }}
         >
-          {item.name}
+          All Trips
         </button>
-      ))}
-    </div>
+        {categories.map((item) => (
+          <button
+            key={item._id}
+            variant="contained"
+            onClick={() => {
+              handleClick(item.id);
+            }}
+            sx={{ margin: 1 }}
+          >
+            {item.name}
+          </button>
+        ))}
+      </div>
+    </Container>
   );
 };

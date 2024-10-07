@@ -41,14 +41,18 @@ export const TripCard = ({ id, title, summary, description, img, price }) => {
   };
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ width: 345, height: 400 }}>
       <CardHeader 
         action={
           <IconButton aria-label="settings">
             <MoreVertIcon />
           </IconButton>
         }
-        title={title}
+        title={
+          <Typography variant="h6" sx={{ fontSize: '1.3rem' }}>
+            {title}
+          </Typography>
+        }
         subheader={`Price: $${price.toFixed(2)}`}
       />
 
