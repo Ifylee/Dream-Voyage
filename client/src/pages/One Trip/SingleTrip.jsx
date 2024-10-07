@@ -3,8 +3,11 @@ import { useParams } from "react-router-dom";
 import { ONE_TRIP } from "../../utils/query";
 import { Grid2 as Grid } from "@mui/material";
 import { TripCard } from "../../components/TripCard/TripCard";
-
+import { useEffect } from "react";
 export const SingleTrip = () => {
+  useEffect(() => {
+    sessionStorage.removeItem("selectedTab");
+  }, []);
   const { id } = useParams();
 
   const { data, error, loading } = useQuery(ONE_TRIP, {
@@ -25,7 +28,7 @@ export const SingleTrip = () => {
 
   return (
     <div>
-      <Grid container>
+      <Grid container justifyContent={"space-around"} sx={{paddingTop:"40px"}}>
         <Grid xs={12} sm={6} md={4} key={trip.id}>
           <TripCard
             id={trip.id}
