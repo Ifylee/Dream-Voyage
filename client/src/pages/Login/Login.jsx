@@ -4,13 +4,14 @@ import { LOGIN_USER } from "../../utils/mutation";
 import Auth from "../../utils/auth";
 import { Link } from "react-router-dom";
 import { useGlobalState } from "../../utils/GlobalState";
-import { TextField, Button, Typography, Container, Box } from '@mui/material';
+import { TextField, Button, Typography, Container, Box, Alert } from '@mui/material';
 import '../../assets/styles/AuthForm.css';
 
 const Login = () => {
   const [formState, setFormState] = useState({ email: "", password: "" });
   const [state, dispatch] = useGlobalState();
   const [login, { error }] = useMutation(LOGIN_USER);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -29,6 +30,7 @@ const Login = () => {
       Auth.login(data.login.token);
     } catch (e) {
       console.error(e);
+      setErrorMessage("Invalid email or password. Please try again.");
     }
   };
 
@@ -41,6 +43,7 @@ const Login = () => {
         <Typography variant="h4" component="h2" gutterBottom>
           Login
         </Typography>
+        {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
         <TextField
           variant="outlined"
           margin="normal"
@@ -71,14 +74,14 @@ const Login = () => {
           type="submit"
           fullWidth
           variant="contained"
-          color="primary"
+          sx={{ mt: 3, mb: 2 }}
         >
-          Submit
+          Login
         </Button>
-        <Link to="/signup" style={{ textDecoration: 'none', marginTop: '10px', display: 'block', textAlign: 'center' }}>
-          No account? Signup
+        {error && <Typography color="error">{error.message}</Typography>}
+        <Link to="/signup">
+          Don't have an account? Sign up
         </Link>
-        {error && <Typography color="error">Login failed</Typography>}
       </Box>
     </Container>
   );
