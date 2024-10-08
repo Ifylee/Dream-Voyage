@@ -1,6 +1,6 @@
 # Dream Voyage
 
-Dream Voyage is a web application designed to help users plan and book their dream vacations. The application provides a seamless experience for users to browse, select, and purchase vacation packages, with a focus on user authentication and personalized trip recommendations.
+Dream Voyage is a web application designed to help users plan and book their dream vacations. The application provides a seamless experience for browsing, selecting, and purchasing vacation packages. Focusing on user experience and worldwide adventure.
 
 ## Table of Contents
 
