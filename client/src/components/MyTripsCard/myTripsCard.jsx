@@ -22,10 +22,9 @@
 //     <Grid size={{md:12}}>
 //       <MyTripsCardStyled>
 //         <CardHeader
-        
-        
+
 //           title={title}
-       
+
 //         />
 //         <Box sx={{ height: 200, overflow: 'hidden' }}>
 //           <CardMedia
@@ -45,47 +44,34 @@
 //   );
 // };
 
-
-
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
-import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import InfoIcon from "@mui/icons-material/Info";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useGlobalState } from "../../utils/GlobalState";
 
 import { useMutation } from "@apollo/client";
-import { ADD_WISH_LIST } from "../../utils/mutation";
-import { ADD_TRIP_TO_CART } from "../../utils/actions";
-
-
+import { DELETE_FROM_LIST } from "../../utils/mutation";
 // eslint-disable-next-line react/prop-types
-export const MyTripsCard = ({ id, title, description, img, price }) => {
+export const MyTripsCard = ({ id, title, img, }) => {
   const [expanded] = React.useState(false);
   const [state, dispatch] = useGlobalState();
   console.log(state);
-  const [addList] = useMutation(ADD_WISH_LIST);
+  const [removeFromList] = useMutation(DELETE_FROM_LIST);
 
-  const addToCart = async () => {
-    dispatch({
-      type: ADD_TRIP_TO_CART,
-      payload: { title, img, price, id },
-    });
-  };
 
-  const addWishTrip = async () => {
+
+  const deleteWishList = async () => {
     try {
-      const { data } = await addList({ variables: { id } });
+      const { data } = await removeFromList({ variables: { id } });
       console.log("Success:", data);
     } catch (err) {
       console.log(err);
@@ -97,14 +83,13 @@ export const MyTripsCard = ({ id, title, description, img, price }) => {
     navigate(`/trip/${id}`);
   };
   return (
-    <Card key ={id} sx={{ width: 345, height: 325 }}>
+    <Card key={id} sx={{ width: 345, height: 325 }}>
       <CardHeader
         title={
           <Typography variant="h6" sx={{ fontSize: "1.3rem" }}>
             {title}
           </Typography>
         }
-        
       />
       <CardMedia
         component="img"
@@ -114,12 +99,12 @@ export const MyTripsCard = ({ id, title, description, img, price }) => {
         onClick={handleImageClick}
         style={{ cursor: "pointer" }}
       />
- 
+
       <CardActions sx={{ display: "flex", justifyContent: "space-between" }}>
         {/* Grouping first two buttons */}
         <Box>
-          <IconButton aria-label="add to favorites"  onClick={addWishTrip}>
-            <DeleteForeverIcon/>
+          <IconButton aria-label="add to favorites" onClick={deleteWishList}>
+            <DeleteForeverIcon />
           </IconButton>
           {/* <IconButton aria-label="share" onClick={addToCart}>
             <ShoppingCartIcon />
@@ -134,7 +119,6 @@ export const MyTripsCard = ({ id, title, description, img, price }) => {
           <InfoIcon />
         </IconButton>
       </CardActions>
-
     </Card>
   );
 };
