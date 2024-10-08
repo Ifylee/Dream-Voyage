@@ -61,13 +61,10 @@ import { useGlobalState } from "../../utils/GlobalState";
 import { useMutation } from "@apollo/client";
 import { DELETE_FROM_LIST } from "../../utils/mutation";
 // eslint-disable-next-line react/prop-types
-export const MyTripsCard = ({ id, title, img, }) => {
+export const MyTripsCard = ({ id, title, img, remove }) => {
   const [expanded] = React.useState(false);
-  const [state, dispatch] = useGlobalState();
-  console.log(state);
+  const [state] = useGlobalState();
   const [removeFromList] = useMutation(DELETE_FROM_LIST);
-
-
 
   const deleteWishList = async () => {
     try {
@@ -102,15 +99,13 @@ export const MyTripsCard = ({ id, title, img, }) => {
 
       <CardActions sx={{ display: "flex", justifyContent: "space-between" }}>
         {/* Grouping first two buttons */}
-        <Box>
+        {remove && (  <Box>
           <IconButton aria-label="add to favorites" onClick={deleteWishList}>
             <DeleteForeverIcon />
           </IconButton>
-          {/* <IconButton aria-label="share" onClick={addToCart}>
-            <ShoppingCartIcon />
-          </IconButton> */}
         </Box>
-
+)}
+      
         {/* Spacer to push the button to the end */}
         <Box sx={{ flexGrow: 1 }} />
 

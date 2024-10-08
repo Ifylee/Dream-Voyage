@@ -28,7 +28,6 @@ export const MyTrips = () => {
   }
 
   const { wishList, purchased } = data.currentUser;
-  console.log(wishList, purchased);
   return (
     <div>
       <Tabs value={value} onChange={handleChange}>
@@ -46,7 +45,7 @@ export const MyTrips = () => {
         >
           {wishList.map((trip) => (
             <Grid2 xs={12} sm={6} md={4} key={trip._id}>
-              <MyTripsCard id={trip.id} title={trip.title} img={trip.img} />
+              <MyTripsCard id={trip.id} title={trip.title} img={trip.img} remove={true} />
             </Grid2>
           ))}
         </Grid2>
@@ -60,7 +59,7 @@ export const MyTrips = () => {
         >
           {purchased.map((trip) => (
             <Grid2 xs={12} sm={6} md={4} key={trip._id}>
-              <MyTripsCard id={trip.id} title={trip.title} img={trip.img} />
+              <MyTripsCard id={trip.id} title={trip.title} img={trip.img} remove={false} />
             </Grid2>
           ))}
         </Grid2>
