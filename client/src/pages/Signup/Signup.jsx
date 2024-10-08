@@ -18,7 +18,7 @@ const Signup = () => {
             [name]: value,
         });
 
-        // Basic validation example
+        // Basic email validation
         if (name === 'email' && !/\S+@\S+\.\S+/.test(value)) {
             setErrors((prevErrors) => ({ ...prevErrors, email: 'Invalid email address' }));
         } else {
