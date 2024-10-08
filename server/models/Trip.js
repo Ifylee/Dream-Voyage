@@ -17,6 +17,11 @@ const tripSchema = new Schema({
   img: {
     type: String,
   },
+  additionalImages: [String],
+  groupSize: {
+    type: String,
+    required: true,
+  },
   price: {
     type: Number,
     required: true,

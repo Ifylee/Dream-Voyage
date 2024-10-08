@@ -66,6 +66,8 @@ export const ONE_TRIP = gql`
       description
       id
       img
+      additionalImages
+      groupSize
       price
       summary
       title
