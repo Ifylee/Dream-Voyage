@@ -36,7 +36,7 @@ class AuthService {
     // Save the token to local storage
     login(idToken) {
         localStorage.setItem('id_token', idToken);
-        window.location.assign('/');
+        // window.location.assign('/');
     }
 
     // Remove the token from local storage
