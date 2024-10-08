@@ -18,7 +18,7 @@ const Signup = () => {
             [name]: value,
         });
 
-        // Basic email validation
+        // Basic validation example
         if (name === 'email' && !/\S+@\S+\.\S+/.test(value)) {
             setErrors((prevErrors) => ({ ...prevErrors, email: 'Invalid email address' }));
         } else {
@@ -39,8 +39,15 @@ const Signup = () => {
     };
 
     return (
-        <Container component="main" maxWidth="xs">
-            <Box component="form" onSubmit={handleFormSubmit} noValidate sx={{ mt: 1 }}>
+        <Container className="auth-container">
+            <br></br>
+            <video autoPlay loop muted className="background-video">
+                <source src="/src/assets/videos/login-background.mp4" type="video/mp4" />
+            </video>
+            <Box className="auth-form" component="form" onSubmit={handleFormSubmit} noValidate>
+                <Typography variant="h4" component="h2" gutterBottom>
+                    Signup
+                </Typography>
                 <TextField
                     margin="normal"
                     required
