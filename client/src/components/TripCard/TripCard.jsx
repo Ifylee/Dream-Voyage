@@ -175,6 +175,7 @@ export const TripCard = ({ id, title, description, img, price }) => {
             {title}
           </Typography>
         }
+        // eslint-disable-next-line react/prop-types
         subheader={`Price: $${price.toFixed(2)}`}
       />
       <CardMedia
