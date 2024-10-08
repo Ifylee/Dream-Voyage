@@ -6,6 +6,7 @@ import Login from "./pages/Login/Login.jsx";
 import Signup from "./pages/Signup/Signup.jsx";
 import { Home } from "./pages/Home/Home.jsx";
 import { SingleTrip } from "./pages/One Trip/SingleTrip.jsx";
+import { MyTrips } from "./pages/My Trips/myTrips.jsx";
 
 const router = createBrowserRouter([
   {
@@ -13,8 +14,8 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       {
-        index:true,
-        element:<Home/>
+        index: true,
+        element: <Home />,
       },
       {
         path: "/login",
@@ -25,10 +26,13 @@ const router = createBrowserRouter([
         element: <Signup />,
       },
       {
-        path:"/trip/:id",
-        element:<SingleTrip/>
-
-      }
+        path: "/trip/:id",
+        element: <SingleTrip />,
+      },
+      {
+        path:"my/trips",
+        element:<MyTrips/>
+      },
     ],
   },
 ]);

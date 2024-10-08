@@ -19,7 +19,7 @@ export const Nav = () => {
   // Objects hold the different endpoints for the pages
   const routes = {
     one: "/",
-    two: "/",
+    two: "/my/trips",
     three: "/login",
     logout:'/'
   };
