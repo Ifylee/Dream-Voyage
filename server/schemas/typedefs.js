@@ -11,6 +11,8 @@ type Category {
     title:String
     summary:String
     description:String
+    additionalImages:[String]
+    groupSize:String
     img:String
     price: Float
     category: Category
@@ -64,4 +66,4 @@ type Mutation {
 
 `;
 
-module.exports = typeDefs
+module.exports = typeDefs;
