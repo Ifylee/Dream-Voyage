@@ -70,6 +70,7 @@ export const Nav = () => {
             // variant="scrollable"
             scrollButtons="auto"
             aria-label="scrollable auto tabs example"
+            TabIndicatorProps={{ style: { display: 'none' } }} // Remove underline indicator
           >
             {/* About Me will be the home page */}
             <Tab
@@ -77,14 +78,14 @@ export const Nav = () => {
               // and indicate which route to send to use
               value="one"
               label="Home"
-              sx={{ minWidth: 80, padding: "6px 12px", fontSize: ".850rem" }} // Adjust the size
+              sx={{ minWidth: 80, padding: "6px 12px", fontSize: ".850rem",  '&.Mui-selected': { color: '#333' }, }} // Adjust the size
             />
             <Tab
               // When the user selects this value this is what will save to the state
               // and indicate which route to send to use
               value="two"
               label="My Trips"
-              sx={{ minWidth: 80, padding: "6px 12px", fontSize: ".850rem" }} // Adjust the size
+              sx={{ minWidth: 80, padding: "6px 12px", fontSize: ".850rem",  '&.Mui-selected': { color: '#333' }, }} // Adjust the size
             />
             {Auth.loggedIn() ? (
               <Tab

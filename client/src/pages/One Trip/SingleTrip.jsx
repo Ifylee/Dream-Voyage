@@ -1,26 +1,34 @@
 import { useQuery, useMutation } from "@apollo/client";
 import { useParams } from "react-router-dom";
 import { ONE_TRIP } from "../../utils/query";
-import { Container, Grid2 as Grid, Typography, Box, IconButton } from "@mui/material";
+import {
+  Container,
+  Grid2 as Grid,
+  Typography,
+  Box,
+  IconButton,
+} from "@mui/material";
 import { useEffect } from "react";
-import { Carousel } from 'react-responsive-carousel';
-import 'react-responsive-carousel/lib/styles/carousel.min.css'; // Import carousel styles
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // Import carousel styles
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useGlobalState } from "../../utils/GlobalState";
 import { ADD_WISH_LIST } from "../../utils/mutation";
 import { ADD_TRIP_TO_CART } from "../../utils/actions";
 
-
 export const SingleTrip = () => {
   const [state, dispatch] = useGlobalState();
-  console.log(state);
-  const [addList] = useMutation(ADD_WISH_LIST);  
+  const [addList] = useMutation(ADD_WISH_LIST);
   const { id } = useParams();
 
   const { data, error, loading } = useQuery(ONE_TRIP, {
     variables: { id }, // Pass the variable here
   });
+
+  useEffect(() => {
+    sessionStorage.removeItem("selectedTab");
+  }, [data]);
 
   if (loading) return <p>Loading...</p>;
 
@@ -32,7 +40,8 @@ export const SingleTrip = () => {
     return <p>No trip data found</p>;
   }
 
-  const {title,img,price, additionalImages,groupSize,description} = data.oneTrip;
+  const { title, img, price, additionalImages, groupSize, description } =
+    data.oneTrip;
 
   const addToCart = async () => {
     dispatch({
@@ -56,17 +65,26 @@ export const SingleTrip = () => {
         <Grid xs={12}>
           <Carousel showThumbs={false} autoPlay infiniteLoop>
             <div>
-              <img src={`/images/${img}`} alt={title} style={{ height: '400px', objectFit: 'cover' }} />
+              <img
+                src={`/images/${img}`}
+                alt={title}
+                style={{ height: "400px", objectFit: "cover" }}
+              />
             </div>
-            {additionalImages && additionalImages.map((img, index) => (
-              <div key={index}>
-                <img src={`/images/${img}`} alt={`${title} ${index + 1}`} style={{ height: '400px', objectFit: 'cover' }} />
-              </div>
-            ))}
+            {additionalImages &&
+              additionalImages.map((img, index) => (
+                <div key={index}>
+                  <img
+                    src={`/images/${img}`}
+                    alt={`${title} ${index + 1}`}
+                    style={{ height: "400px", objectFit: "cover" }}
+                  />
+                </div>
+              ))}
           </Carousel>
         </Grid>
         <Grid item xs={12}>
-          <Box sx={{ textAlign: 'center', padding: 2 }}>
+          <Box sx={{ textAlign: "center", padding: 2 }}>
             <Typography variant="h2" component="h1" gutterBottom>
               {title}
             </Typography>
@@ -77,9 +95,11 @@ export const SingleTrip = () => {
               {description}
             </Typography>
             <Typography variant="h4" component="h3">
-              Price: ${price ? price.toFixed(2) : 'N/A'}
+              Price: ${price ? price.toFixed(2) : "N/A"}
             </Typography>
-            <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
+            <Box
+              sx={{ display: "flex", justifyContent: "center", marginTop: 2 }}
+            >
               <IconButton aria-label="add to favorites" onClick={addWishTrip}>
                 <FavoriteIcon />
               </IconButton>
