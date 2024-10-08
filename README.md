@@ -35,13 +35,15 @@ To get a local copy up and running, follow these steps:
 
 1. **Clone the repository**:
     ```sh
-    git clone https://github.com/So-Emily/Dream-Voyage
+    git clone <GitHub Repository>
     cd dream-voyage
     ```
 
 2. **Install dependencies**:
     ```sh
-    npm install
+    npm run render-build
+    or
+    npm install && npm run build
     ```
 
 3. **Set up environment variables**:
@@ -55,13 +57,8 @@ To get a local copy up and running, follow these steps:
     ```sh
     npm run seed
     ```
-    
-5. **Build the client**:
-     ```sh
-     npm run build
-     ```  
 
-6. **Start the development server**:
+5. **Start the development server**:
     ```sh
     npm run develop
     ```
