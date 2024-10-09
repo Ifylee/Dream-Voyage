@@ -21,7 +21,7 @@ export const Nav = () => {
     one: "/",
     two: "/my/trips",
     three: "/login",
-    logout:'/'
+    logout: "/",
   };
 
   const handleChange = (event, newValue) => {
@@ -46,7 +46,13 @@ export const Nav = () => {
         color: "#333",
       }}
     >
-      <Grid container size={12} alignItems={"center"} justifyContent ={"space-between"} marginRight={"15px"}>
+      <Grid
+        container
+        size={12}
+        alignItems={"center"}
+        justifyContent={"space-between"}
+        marginRight={"15px"}
+      >
         <Grid size={{ xs: 4, md: 2, sm: 4 }}>
           {/* This will hold the name in the navbar at the far left */}
           <h2
@@ -54,7 +60,7 @@ export const Nav = () => {
               fontFamily: "'Playfair Display', sans-serif",
               fontWeight: 400,
             }}
-            onClick={()=>navigate('/')}
+            onClick={() => navigate("/")}
           >
             Dream Voyage
           </h2>
@@ -70,7 +76,7 @@ export const Nav = () => {
             // variant="scrollable"
             scrollButtons="auto"
             aria-label="scrollable auto tabs example"
-            TabIndicatorProps={{ style: { display: 'none' } }} // Remove underline indicator
+            TabIndicatorProps={{ style: { display: "none" } }} // Remove underline indicator
           >
             {/* About Me will be the home page */}
             <Tab
@@ -78,28 +84,41 @@ export const Nav = () => {
               // and indicate which route to send to use
               value="one"
               label="Home"
-              sx={{ minWidth: 80, padding: "6px 12px", fontSize: ".850rem",  '&.Mui-selected': { color: '#333' }, }} // Adjust the size
+              sx={{
+                minWidth: 80,
+                padding: "6px 12px",
+                fontSize: ".850rem",
+                "&.Mui-selected": { color: "#333" },
+              }} // Adjust the size
             />
             <Tab
               // When the user selects this value this is what will save to the state
               // and indicate which route to send to use
               value="two"
               label="My Trips"
-              sx={{ minWidth: 80, padding: "6px 12px", fontSize: ".850rem",  '&.Mui-selected': { color: '#333' }, }} // Adjust the size
+              sx={{
+                minWidth: 80,
+                padding: "6px 12px",
+                fontSize: ".850rem",
+                "&.Mui-selected": { color: "#333" },
+              }} // Adjust the size
             />
             {Auth.loggedIn() ? (
               <Tab
                 value="logout"
                 label="Logout"
-                onClick={() => Auth.logout()}
+                onClick={() => {
+                  Auth.logout();
+                  navigate("/");
+                }}
               />
             ) : (
               <Tab label="Login" value="three" />
             )}
           </Tabs>
         </Grid>
-        <Grid container justifyContent={"end"} sx={{paddingRight:"20px"}}>
-          <Grid size={{ md: 6, xs:4, sm:4 }}>
+        <Grid container justifyContent={"end"} sx={{ paddingRight: "20px" }}>
+          <Grid size={{ md: 6, xs: 4, sm: 4 }}>
             <FullScreenDialog />
           </Grid>
         </Grid>
