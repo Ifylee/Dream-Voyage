@@ -1,23 +1,38 @@
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { useParams } from "react-router-dom";
 import { ONE_TRIP } from "../../utils/query";
-import { Container, Grid, Typography, Box, IconButton } from "@mui/material";
-import { useEffect } from "react";
-import { Carousel } from 'react-responsive-carousel';
-import 'react-responsive-carousel/lib/styles/carousel.min.css'; // Import carousel styles
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import {
+  Container,
+  Grid2 as Grid,
+  Typography,
+  Box,
+  IconButton,
+  Snackbar,
+} from "@mui/material";
+import { useEffect, useState } from "react";
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // Import carousel styles
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { useGlobalState } from "../../utils/GlobalState";
+import { ADD_WISH_LIST } from "../../utils/mutation";
+import { ADD_TRIP_TO_CART } from "../../utils/actions";
+import Auth from "../../utils/auth";
 
 export const SingleTrip = () => {
-  useEffect(() => {
-    sessionStorage.removeItem("selectedTab");
-  }, []);
-  
+  const [state, dispatch] = useGlobalState();
+  const [addList] = useMutation(ADD_WISH_LIST);
   const { id } = useParams();
+  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   const { data, error, loading } = useQuery(ONE_TRIP, {
     variables: { id }, // Pass the variable here
   });
+
+  useEffect(() => {
+    sessionStorage.removeItem("selectedTab");
+  }, [data]);
 
   if (loading) return <p>Loading...</p>;
 
@@ -29,48 +44,92 @@ export const SingleTrip = () => {
     return <p>No trip data found</p>;
   }
 
-  const trip = data.oneTrip;
+  const { title, img, price, additionalImages, groupSize, description } =
+    data.oneTrip;
+
+  const addToCart = async () => {
+    dispatch({
+      type: ADD_TRIP_TO_CART,
+      payload: { title, img, price, id },
+    });
+    setIsSnackbarOpen(true);
+    // Sets the message on the snackbar
+    setSnackbarMessage("Trip added to cart!");
+    console.log("test");
+  };
+
+  const addWishTrip = async () => {
+    try {
+      const { data } = await addList({ variables: { id } });
+      if (Auth.loggedIn()) {
+        setIsSnackbarOpen(true);
+        // Sets the message on the snackbar
+        setSnackbarMessage("Added to wishlist!");
+      }
+      console.log("Success:", data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <Container maxWidth="lg" sx={{ marginTop: 4 }}>
       <Grid container spacing={4}>
-        <Grid item xs={12}>
+        <Grid xs={12}>
           <Carousel showThumbs={false} autoPlay infiniteLoop>
             <div>
-              <img src={`/images/${trip.img}`} alt={trip.title} style={{ height: '400px', objectFit: 'cover' }} />
+              <img
+                src={`/images/${img}`}
+                alt={title}
+                style={{ height: "400px", objectFit: "cover" }}
+              />
             </div>
-            {trip.additionalImages && trip.additionalImages.map((img, index) => (
-              <div key={index}>
-                <img src={`/images/${img}`} alt={`${trip.title} ${index + 1}`} style={{ height: '400px', objectFit: 'cover' }} />
-              </div>
-            ))}
+            {additionalImages &&
+              additionalImages.map((img, index) => (
+                <div key={index}>
+                  <img
+                    src={`/images/${img}`}
+                    alt={`${title} ${index + 1}`}
+                    style={{ height: "400px", objectFit: "cover" }}
+                  />
+                </div>
+              ))}
           </Carousel>
         </Grid>
         <Grid item xs={12}>
-          <Box sx={{ textAlign: 'center', padding: 2 }}>
+          <Box sx={{ textAlign: "center", padding: 2 }}>
             <Typography variant="h2" component="h1" gutterBottom>
-              {trip.title}
+              {title}
             </Typography>
             <Typography variant="h6" component="h2" gutterBottom>
-              Group Size: {trip.groupSize}
+              Group Size: {groupSize}
             </Typography>
             <Typography variant="body1" paragraph>
-              {trip.description}
+              {description}
             </Typography>
             <Typography variant="h4" component="h3">
-              Price: ${trip.price ? trip.price.toFixed(2) : 'N/A'}
+              Price: ${price ? price.toFixed(2) : "N/A"}
             </Typography>
-            <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
-              <IconButton aria-label="add to favorites">
+            <Box
+              sx={{ display: "flex", justifyContent: "center", marginTop: 2 }}
+            >
+              <IconButton aria-label="add to favorites" onClick={addWishTrip}>
                 <FavoriteIcon />
               </IconButton>
-              <IconButton aria-label="add to cart">
+              <IconButton aria-label="add to cart" onClick={addToCart}>
                 <ShoppingCartIcon />
               </IconButton>
             </Box>
           </Box>
         </Grid>
       </Grid>
+      <Snackbar
+        open={isSnackbarOpen}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        autoHideDuration={3000}
+        onClose={() => setIsSnackbarOpen(false)}
+        message={snackbarMessage}
+      />
     </Container>
   );
 };

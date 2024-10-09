@@ -29,7 +29,7 @@ export const reducer = (state, action) => {
       };
     case REMOVE_TRIP_FROM_CART:
       let updatedCart = state.cart.filter(
-        (trip) => trip._id !== action.payload
+        (trip) => trip.id !== action.payload
       ); // Remove a trip by id
       return {
         ...state,

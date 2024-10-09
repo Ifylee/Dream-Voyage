@@ -27,7 +27,7 @@ db.once("open", async () => {
       additionalImages: ["lagos2.jpg"],
       category: categories[0]._id,
       groupSize: "4-7",
-      price: 2.99,
+      price: 2000.00,
     },
     {
       title: "Zanzibar Tanzania",
@@ -38,7 +38,7 @@ db.once("open", async () => {
       additionalImages: ["zanzibar2.jpg"],
       category: categories[0]._id,
       groupSize: "2-4",
-      price: 1.99,
+      price: 3500.99,
     },
     {
       title: "Japan Excursion",
@@ -49,7 +49,7 @@ db.once("open", async () => {
       img: "japan.jpg",
       additionalImages: ["japan2.jpg"],
       groupSize: "2-4",
-      price: 7.99,
+      price: 4500.99,
     },
     {
       title: "Seoul South Korea",
@@ -60,7 +60,7 @@ db.once("open", async () => {
       img: "seoul.jpg",
       additionalImages: ["seoul2.jpg"],
       groupSize: "3-6",
-      price: 3.99,
+      price: 3002.99,
     },
     {
       title: "Singapore",
@@ -71,7 +71,7 @@ db.once("open", async () => {
       img: "singapore.jpg",
       additionalImages: ["singapore2.jpg"],
       groupSize: "4-7",
-      price: 14.99,
+      price: 3400.99,
     },
     {
       title: "Explore Vienna",
@@ -82,7 +82,7 @@ db.once("open", async () => {
       img: "vienna.jpg",
       additionalImages: ["vienna2.jpg"],
       groupSize: "3-5",
-      price: 399.99,
+      price: 3999.99,
     },
     {
       title: "Amsterdam Holiday",
@@ -93,7 +93,7 @@ db.once("open", async () => {
       img: "amsterdam.jpg",
       additionalImages: "amsterdam2.jpg",
       groupSize: "2-4",
-      price: 199.99,
+      price: 2999.99,
     },
     {
       title: "Visit the Shire",
@@ -104,7 +104,7 @@ db.once("open", async () => {
       img: "shire.jpg",
       additionalImages: ["shire2.jpg"],
       groupSize: "4-6",
-      price: 9.99,
+      price: 3500.99,
     },
     {
       title: "Mexico City Ahi Nos Vidrios",
@@ -115,7 +115,7 @@ db.once("open", async () => {
       img: "mexico-city.jpg",
       additionalImages: ["mexico-city2.jpg"],
       groupSize: "3-5",
-      price: 1.99,
+      price: 2000.99,
     },
     {
       title: "Ancient City of Machu Pichu",
@@ -126,7 +126,7 @@ db.once("open", async () => {
       img: "machu-pichu.jpg",
       additionalImages: ["machu-pichu2.jpg"],
       groupSize: "1-3",
-      price: 2.99,
+      price: 5500.99,
     },
     {
       title: "Vancouver Getaway",
@@ -137,7 +137,7 @@ db.once("open", async () => {
       img: "vancouver.jpg",
       additionalImages: ["vancouver2.jpg"],
       groupSize: "4-7",
-      price: 7.99,
+      price: 1500.99,
     },
     {
       title: "Rio de Janeiro Brazil",
@@ -148,7 +148,7 @@ db.once("open", async () => {
       img: "brazil.jpg",
       additionalImages: ["brazil2.jpg"],
       groupSize: "3-6",
-      price: 9.99,
+      price: 4000.99,
     },
   ]);
 

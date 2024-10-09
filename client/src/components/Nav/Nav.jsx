@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import { Grid2 as Grid } from "@mui/material";
+import { Grid2 as Grid, Snackbar } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Auth from "../../utils/auth";
 import { FullScreenDialog } from "../Cart/cart";
@@ -14,14 +14,16 @@ export const Nav = () => {
     // correct page
     return sessionStorage.getItem("selectedTab") || "one";
   });
+  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
   // This variable will help redirect the page to the corresponding component
   const navigate = useNavigate();
   // Objects hold the different endpoints for the pages
   const routes = {
     one: "/",
-    two: "/",
+    two: "/my/trips",
     three: "/login",
-    logout:'/'
+    logout: "/",
   };
 
   const handleChange = (event, newValue) => {
@@ -46,7 +48,13 @@ export const Nav = () => {
         color: "#333",
       }}
     >
-      <Grid container size={12} alignItems={"center"} justifyContent ={"space-between"} marginRight={"15px"}>
+      <Grid
+        container
+        size={12}
+        alignItems={"center"}
+        justifyContent={"space-between"}
+        marginRight={"15px"}
+      >
         <Grid size={{ xs: 4, md: 2, sm: 4 }}>
           {/* This will hold the name in the navbar at the far left */}
           <h2
@@ -54,7 +62,7 @@ export const Nav = () => {
               fontFamily: "'Playfair Display', sans-serif",
               fontWeight: 400,
             }}
-            onClick={()=>navigate('/')}
+            onClick={() => navigate("/")}
           >
             Dream Voyage
           </h2>
@@ -70,6 +78,7 @@ export const Nav = () => {
             // variant="scrollable"
             scrollButtons="auto"
             aria-label="scrollable auto tabs example"
+            TabIndicatorProps={{ style: { display: "none" } }} // Remove underline indicator
           >
             {/* About Me will be the home page */}
             <Tab
@@ -77,32 +86,55 @@ export const Nav = () => {
               // and indicate which route to send to use
               value="one"
               label="Home"
-              sx={{ minWidth: 80, padding: "6px 12px", fontSize: ".850rem" }} // Adjust the size
+              sx={{
+                minWidth: 80,
+                padding: "6px 12px",
+                fontSize: ".850rem",
+                "&.Mui-selected": { color: "#333" },
+              }} // Adjust the size
             />
             <Tab
               // When the user selects this value this is what will save to the state
               // and indicate which route to send to use
               value="two"
               label="My Trips"
-              sx={{ minWidth: 80, padding: "6px 12px", fontSize: ".850rem" }} // Adjust the size
+              sx={{
+                minWidth: 80,
+                padding: "6px 12px",
+                fontSize: ".850rem",
+                "&.Mui-selected": { color: "#333" },
+              }} // Adjust the size
             />
             {Auth.loggedIn() ? (
               <Tab
                 value="logout"
                 label="Logout"
-                onClick={() => Auth.logout()}
+                onClick={() => {
+                  setIsSnackbarOpen(true);
+                  // Sets the message on the snackbar
+                  setSnackbarMessage("Logged Out");
+                  Auth.logout();
+                  navigate("/");
+                }}
               />
             ) : (
               <Tab label="Login" value="three" />
             )}
           </Tabs>
         </Grid>
-        <Grid container justifyContent={"end"} sx={{paddingRight:"20px"}}>
-          <Grid size={{ md: 6, xs:4, sm:4 }}>
+        <Grid container justifyContent={"end"} sx={{ paddingRight: "20px" }}>
+          <Grid size={{ md: 6, xs: 4, sm: 4 }}>
             <FullScreenDialog />
           </Grid>
         </Grid>
       </Grid>
+      <Snackbar
+        open={isSnackbarOpen}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        autoHideDuration={3000}
+        onClose={() => setIsSnackbarOpen(false)}
+        message={snackbarMessage}
+      />
     </Grid>
   );
 };
