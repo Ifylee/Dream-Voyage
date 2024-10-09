@@ -64,15 +64,6 @@ export const MyTrips = () => {
           ))}
         </Grid2>
       )}
-      <Snackbar
-        open={open}
-        autoHideDuration={6000}
-        onClose={() => setOpen(false)}
-      >
-        <Alert onClose={() => setOpen(false)} severity="success">
-          Trip added to wishlist!
-        </Alert>
-      </Snackbar>
     </div>
   );
 };

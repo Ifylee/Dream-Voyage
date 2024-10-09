@@ -1,6 +1,6 @@
-
-import React from "react";
+import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
+import { BOUGHT_TRIP } from "../../utils/mutation";
 // import { CREATE_CHECKOUT_SESSION } from "../../utils/mutation";
 import { loadStripe } from "@stripe/stripe-js";
 import { useGlobalState } from "../../utils/GlobalState";
@@ -17,18 +17,22 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
-import AirplanemodeActiveIcon from '@mui/icons-material/AirplanemodeActive';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
-import { Box, Divider, Paper, Badge, TextField } from "@mui/material";
-import { REMOVE_TRIP_FROM_CART } from "../../utils/actions";
-const stripePromise = loadStripe('your_stripe_publishable_key');
+import AirplanemodeActiveIcon from "@mui/icons-material/AirplanemodeActive";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+import { Box, Divider, Paper, Badge, TextField, Snackbar } from "@mui/material";
+import { REMOVE_TRIP_FROM_CART, CLEAR_CART } from "../../utils/actions";
+import Auth from "../../utils/auth";
+const stripePromise = loadStripe("your_stripe_publishable_key");
 
 export const FullScreenDialog = ({ icon }) => {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const [state, dispatch] = useGlobalState();
+  const [checkoutTrips] = useMutation(BOUGHT_TRIP);
+  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
   // const [createCheckoutSession] = useMutation(CREATE_CHECKOUT_SESSION);
-  const [couponCode, setCouponCode] = React.useState('');
+  const [couponCode, setCouponCode] = React.useState("");
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -50,7 +54,7 @@ export const FullScreenDialog = ({ icon }) => {
   const handleCheckout = async () => {
     try {
       const { data } = await createCheckoutSession({
-        variables: { items: state.cart.map(item => item.id) },
+        variables: { items: state.cart.map((item) => item.id) },
       });
       const stripe = await stripePromise;
       const result = await stripe.redirectToCheckout({
@@ -60,12 +64,30 @@ export const FullScreenDialog = ({ icon }) => {
         console.error(result.error);
       }
     } catch (error) {
-      console.error('Error creating checkout session:', error);
+      console.error("Error creating checkout session:", error);
     }
   };
   const handleClearCart = () => {
-    dispatch({ type: "CLEAR_CART" });
+    dispatch({ type: CLEAR_CART });
   };
+
+  const checkout = async () => {
+    try {
+      if (state.cart && Auth.loggedIn()) {
+        state.cart.forEach(async (trip) => {
+          const { data } = await checkoutTrips({ variables: { id: trip.id } });
+        });
+        handleClearCart();
+        handleClose();
+        setIsSnackbarOpen(true);
+        // Sets the message on the snackbar
+        setSnackbarMessage("Get ready for your next adventure 🌎");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const subtotal = state.cart.reduce((acc, item) => acc + item.price, 0);
   const tax = subtotal * 0.1; // Assuming 10% tax
   const total = subtotal + tax;
@@ -81,7 +103,7 @@ export const FullScreenDialog = ({ icon }) => {
         open={open}
         onClose={handleClose}
         PaperProps={{
-          sx: { width: { xs: '100%', sm: 400 }, backgroundColor: "#F5F5F5" },
+          sx: { width: { xs: "100%", sm: 400 }, backgroundColor: "#F5F5F5" },
         }}
       >
         <AppBar position="static" sx={{ backgroundColor: "#1976D2" }}>
@@ -99,14 +121,28 @@ export const FullScreenDialog = ({ icon }) => {
             </IconButton>
           </Toolbar>
         </AppBar>
-        <Box sx={{ padding: 3, height: '100%', display: 'flex', flexDirection: 'column' }}>
-          <Paper elevation={3} sx={{ padding: 2, flexGrow: 1, overflow: 'auto' }}>
+        <Box
+          sx={{
+            padding: 3,
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <Paper
+            elevation={3}
+            sx={{ padding: 2, flexGrow: 1, overflow: "auto" }}
+          >
             <List>
               {state.cart.map((item, index) => (
                 <React.Fragment key={item.id}>
                   <ListItem
                     secondaryAction={
-                      <IconButton edge="end" aria-label="delete" onClick={()=>handleRemoveFromCart(item.id)}>
+                      <IconButton
+                        edge="end"
+                        aria-label="delete"
+                        onClick={() => handleRemoveFromCart(item.id)}
+                      >
                         <DeleteIcon />
                       </IconButton>
                     }
@@ -118,39 +154,71 @@ export const FullScreenDialog = ({ icon }) => {
                       primary={item.title}
                       secondary={`$${item.price.toFixed(2)}`}
                     />
-                    <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
-                      <IconButton onClick={() => handleUpdateQuantity(item.id, -1)} disabled={item.quantity <= 1}>
+                    <Box sx={{ display: "flex", alignItems: "center", ml: 2 }}>
+                      <IconButton
+                        onClick={() => handleUpdateQuantity(item.id, -1)}
+                        disabled={item.quantity <= 1}
+                      >
                         <RemoveIcon />
                       </IconButton>
                       <Typography>{item.quantity}</Typography>
-                      <IconButton onClick={() => handleUpdateQuantity(item.id, 1)}>
+                      <IconButton
+                        onClick={() => handleUpdateQuantity(item.id, 1)}
+                      >
                         <AddIcon />
                       </IconButton>
                     </Box>
                   </ListItem>
-                  {index < state.cart.length - 1 && <Divider variant="inset" component="li" />}
+                  {index < state.cart.length - 1 && (
+                    <Divider variant="inset" component="li" />
+                  )}
                 </React.Fragment>
               ))}
             </List>
             {state.cart.length === 0 && (
-              <Typography variant="subtitle1" align="center" sx={{ marginTop: 2 }}>
+              <Typography
+                variant="subtitle1"
+                align="center"
+                sx={{ marginTop: 2 }}
+              >
                 Your cart is empty. Start adding some amazing trips!
               </Typography>
             )}
           </Paper>
-          <Paper elevation={3} sx={{ marginTop: 2, padding: 2, backgroundColor: '#E3F2FD' }}>
+          <Paper
+            elevation={3}
+            sx={{ marginTop: 2, padding: 2, backgroundColor: "#E3F2FD" }}
+          >
             <Typography variant="h6" gutterBottom>
               Order Summary
             </Typography>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: 1 }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginBottom: 1,
+              }}
+            >
               <Typography>Subtotal:</Typography>
               <Typography>${subtotal.toFixed(2)}</Typography>
             </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: 1 }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginBottom: 1,
+              }}
+            >
               <Typography>Tax:</Typography>
               <Typography>${tax.toFixed(2)}</Typography>
             </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: 2 }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginBottom: 2,
+              }}
+            >
               <Typography variant="h6">Total:</Typography>
               <Typography variant="h6">${total.toFixed(2)}</Typography>
             </Box>
@@ -165,12 +233,12 @@ export const FullScreenDialog = ({ icon }) => {
             <Button
               variant="contained"
               fullWidth
-              onClick={handleCheckout}
+              onClick={checkout}
               startIcon={<AirplanemodeActiveIcon />}
               sx={{
-                backgroundColor: '#4CAF50',
-                '&:hover': {
-                  backgroundColor: '#45A049',
+                backgroundColor: "#4CAF50",
+                "&:hover": {
+                  backgroundColor: "#45A049",
                 },
                 marginBottom: 1,
               }}
@@ -185,16 +253,19 @@ export const FullScreenDialog = ({ icon }) => {
             >
               Clear Cart
             </Button>
-            <Button
-              variant="text"
-              fullWidth
-              onClick={handleClose}
-            >
+            <Button variant="text" fullWidth onClick={handleClose}>
               Continue Shopping
             </Button>
           </Paper>
         </Box>
       </Drawer>
+      <Snackbar
+        open={isSnackbarOpen}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        autoHideDuration={3000}
+        onClose={() => setIsSnackbarOpen(false)}
+        message={snackbarMessage}
+      />
     </React.Fragment>
   );
 };
