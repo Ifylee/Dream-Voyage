@@ -96,7 +96,6 @@ const Login = () => {
         >
           Login
         </Button>
-        {error && <Typography color="error">{error.message}</Typography>}
         <Link to="/signup">Don't have an account? Sign up</Link>
       </Box>
     </Container>
