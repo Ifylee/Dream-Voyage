@@ -37,7 +37,7 @@ const Login = () => {
   return (
     <Container className="auth-container">
       <video autoPlay loop muted className="background-video">
-        <source src="/src/assets/videos/login-background.mp4" type="video/mp4" />
+          <source src="https://coding-videos-bucket.s3.us-east-2.amazonaws.com/login-background.mp4" type="video/mp4" />
       </video>
       <Box className="auth-form" component="form" onSubmit={handleFormSubmit} noValidate>
         <Typography variant="h4" component="h2" gutterBottom>
