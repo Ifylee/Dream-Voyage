@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import { Grid2 as Grid } from "@mui/material";
+import { Grid2 as Grid, Snackbar } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Auth from "../../utils/auth";
 import { FullScreenDialog } from "../Cart/cart";
@@ -14,6 +14,8 @@ export const Nav = () => {
     // correct page
     return sessionStorage.getItem("selectedTab") || "one";
   });
+  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
   // This variable will help redirect the page to the corresponding component
   const navigate = useNavigate();
   // Objects hold the different endpoints for the pages
@@ -108,6 +110,9 @@ export const Nav = () => {
                 value="logout"
                 label="Logout"
                 onClick={() => {
+                  setIsSnackbarOpen(true);
+                  // Sets the message on the snackbar
+                  setSnackbarMessage("Logged Out");
                   Auth.logout();
                   navigate("/");
                 }}
@@ -123,6 +128,13 @@ export const Nav = () => {
           </Grid>
         </Grid>
       </Grid>
+      <Snackbar
+        open={isSnackbarOpen}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        autoHideDuration={3000}
+        onClose={() => setIsSnackbarOpen(false)}
+        message={snackbarMessage}
+      />
     </Grid>
   );
 };

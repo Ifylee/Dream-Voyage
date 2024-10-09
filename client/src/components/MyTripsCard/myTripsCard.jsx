@@ -46,7 +46,7 @@
 
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
-import { Box } from "@mui/material";
+import { Box, Grid2 as Grid, Snackbar } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
@@ -57,18 +57,25 @@ import Typography from "@mui/material/Typography";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import InfoIcon from "@mui/icons-material/Info";
 import { useGlobalState } from "../../utils/GlobalState";
-
+import { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { DELETE_FROM_LIST } from "../../utils/mutation";
 // eslint-disable-next-line react/prop-types
 export const MyTripsCard = ({ id, title, img, remove }) => {
   const [expanded] = React.useState(false);
-  const [state] = useGlobalState();
+  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
   const [removeFromList] = useMutation(DELETE_FROM_LIST);
 
   const deleteWishList = async () => {
     try {
       const { data } = await removeFromList({ variables: { id } });
+      console.log(data)
+      if (data.deleteFromList.wishList) {
+        setIsSnackbarOpen(true);
+        // Sets the message on the snackbar
+        setSnackbarMessage("Deleted from List");
+      }
       console.log("Success:", data);
     } catch (err) {
       console.log(err);
@@ -80,40 +87,53 @@ export const MyTripsCard = ({ id, title, img, remove }) => {
     navigate(`/trip/${id}`);
   };
   return (
-    <Card key={id} sx={{ width: 345, height: 325 }}>
-      <CardHeader
-        title={
-          <Typography variant="h6" sx={{ fontSize: "1.3rem" }}>
-            {title}
-          </Typography>
-        }
+    <Grid>
+      <Snackbar
+        open={isSnackbarOpen}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        autoHideDuration={2000}
+        onClose={() => setIsSnackbarOpen(false)}
+        message={snackbarMessage}
       />
-      <CardMedia
-        component="img"
-        height="194"
-        src={`/images/${img}`}
-        alt={title}
-        onClick={handleImageClick}
-        style={{ cursor: "pointer" }}
-      />
+      <Card key={id} sx={{ width: 345, height: 325 }}>
+        <CardHeader
+          title={
+            <Typography variant="h6" sx={{ fontSize: "1.3rem" }}>
+              {title}
+            </Typography>
+          }
+        />
+        <CardMedia
+          component="img"
+          height="194"
+          src={`/images/${img}`}
+          alt={title}
+          onClick={handleImageClick}
+          style={{ cursor: "pointer" }}
+        />
 
-      <CardActions sx={{ display: "flex", justifyContent: "space-between" }}>
-        {/* Grouping first two buttons */}
-        {remove && (  <Box>
-          <IconButton aria-label="add to favorites" onClick={deleteWishList}>
-            <DeleteForeverIcon />
+        <CardActions sx={{ display: "flex", justifyContent: "space-between" }}>
+          {/* Grouping first two buttons */}
+          {remove && (
+            <Box>
+              <IconButton
+                aria-label="add to favorites"
+                onClick={deleteWishList}
+              >
+                <DeleteForeverIcon />
+              </IconButton>
+            </Box>
+          )}
+
+          {/* Spacer to push the button to the end */}
+          <Box sx={{ flexGrow: 1 }} />
+
+          {/* New button at the end */}
+          <IconButton aria-label="settings" onClick={handleImageClick}>
+            <InfoIcon />
           </IconButton>
-        </Box>
-)}
-      
-        {/* Spacer to push the button to the end */}
-        <Box sx={{ flexGrow: 1 }} />
-
-        {/* New button at the end */}
-        <IconButton aria-label="settings" onClick={handleImageClick}>
-          <InfoIcon />
-        </IconButton>
-      </CardActions>
-    </Card>
+        </CardActions>
+      </Card>
+    </Grid>
   );
 };

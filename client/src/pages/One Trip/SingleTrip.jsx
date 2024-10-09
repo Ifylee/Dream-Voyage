@@ -7,8 +7,9 @@ import {
   Typography,
   Box,
   IconButton,
+  Snackbar,
 } from "@mui/material";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // Import carousel styles
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -16,11 +17,14 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useGlobalState } from "../../utils/GlobalState";
 import { ADD_WISH_LIST } from "../../utils/mutation";
 import { ADD_TRIP_TO_CART } from "../../utils/actions";
+import Auth from "../../utils/auth";
 
 export const SingleTrip = () => {
   const [state, dispatch] = useGlobalState();
   const [addList] = useMutation(ADD_WISH_LIST);
   const { id } = useParams();
+  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   const { data, error, loading } = useQuery(ONE_TRIP, {
     variables: { id }, // Pass the variable here
@@ -48,11 +52,20 @@ export const SingleTrip = () => {
       type: ADD_TRIP_TO_CART,
       payload: { title, img, price, id },
     });
+    setIsSnackbarOpen(true);
+    // Sets the message on the snackbar
+    setSnackbarMessage("Trip added to cart!");
+    console.log("test");
   };
 
   const addWishTrip = async () => {
     try {
       const { data } = await addList({ variables: { id } });
+      if (Auth.loggedIn()) {
+        setIsSnackbarOpen(true);
+        // Sets the message on the snackbar
+        setSnackbarMessage("Added to wishlist!");
+      }
       console.log("Success:", data);
     } catch (err) {
       console.log(err);
@@ -110,6 +123,13 @@ export const SingleTrip = () => {
           </Box>
         </Grid>
       </Grid>
+      <Snackbar
+        open={isSnackbarOpen}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        autoHideDuration={3000}
+        onClose={() => setIsSnackbarOpen(false)}
+        message={snackbarMessage}
+      />
     </Container>
   );
 };
