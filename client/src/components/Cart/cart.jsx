@@ -1,7 +1,7 @@
+import React, { useEffect } from "react";
+import { useLazyQuery } from '@apollo/client';
+import { QUERY_CHECKOUT } from '../../utils/query';
 
-import React from "react";
-import { useMutation } from "@apollo/client";
-// import { CREATE_CHECKOUT_SESSION } from "../../utils/mutation";
 import { loadStripe } from "@stripe/stripe-js";
 import { useGlobalState } from "../../utils/GlobalState";
 import Button from "@mui/material/Button";
@@ -21,54 +21,90 @@ import AirplanemodeActiveIcon from '@mui/icons-material/AirplanemodeActive';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { Box, Divider, Paper, Badge, TextField } from "@mui/material";
-import { REMOVE_TRIP_FROM_CART } from "../../utils/actions";
-const stripePromise = loadStripe('your_stripe_publishable_key');
+
+const stripePromise = loadStripe('pk_test_TYooMQauvdEDq54NiTphI7jx');
 
 export const FullScreenDialog = ({ icon }) => {
   const [open, setOpen] = React.useState(false);
   const [state, dispatch] = useGlobalState();
-  // const [createCheckoutSession] = useMutation(CREATE_CHECKOUT_SESSION);
+  const [getCheckout, { data }] = useLazyQuery(QUERY_CHECKOUT);
   const [couponCode, setCouponCode] = React.useState('');
+  
+  useEffect(() => {
+    if (data) {
+      stripePromise.then((res) => {
+        res.redirectToCheckout({ sessionId: data.checkout.session });
+      });
+    }
+  }, [data]);
+
+  useEffect(() => {
+    async function getCart() {
+      const cart = await idbPromise('cart', 'get');
+      dispatch({ type: ADD_MULTIPLE_TO_CART, products: [...cart] });
+    }
+
+    if (!state.cart.length) {
+      getCart();
+    }
+  }, [state.cart.length, dispatch]);
+
+
+
+
   const handleClickOpen = () => {
     setOpen(true);
   };
+
   const handleClose = () => {
     setOpen(false);
   };
+
   const handleRemoveFromCart = (id) => {
     dispatch({
-      type: REMOVE_TRIP_FROM_CART,
+      type: "REMOVE_TRIP_FROM_CART",
       payload: id,
     });
   };
+
   const handleUpdateQuantity = (id, change) => {
     dispatch({
       type: "UPDATE_CART_QUANTITY",
       payload: { id, change },
     });
   };
+
   const handleCheckout = async () => {
     try {
-      const { data } = await createCheckoutSession({
-        variables: { items: state.cart.map(item => item.id) },
+      getCheckout({
+        variables: { 
+          // products: [...state.cart],
+          // TODO: add the products from the cart
+          // TODO: add the coupon code from the input field
+          // The bottom is just a test using a static product 
+          products:[{
+            image: "http://placehold.it/100x100",
+            name: "Test Product",
+            _id: "1234567",
+            price: 100,
+            purchaseQuantity: 1
+          }]
+        },
       });
-      const stripe = await stripePromise;
-      const result = await stripe.redirectToCheckout({
-        sessionId: data.createCheckoutSession.sessionId,
-      });
-      if (result.error) {
-        console.error(result.error);
-      }
+  
     } catch (error) {
       console.error('Error creating checkout session:', error);
     }
   };
+
   const handleClearCart = () => {
     dispatch({ type: "CLEAR_CART" });
   };
-  const subtotal = state.cart.reduce((acc, item) => acc + item.price, 0);
+
+  const subtotal = state.cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
   const tax = subtotal * 0.1; // Assuming 10% tax
   const total = subtotal + tax;
+
   return (
     <React.Fragment>
       <IconButton color="inherit" onClick={handleClickOpen}>
@@ -81,10 +117,10 @@ export const FullScreenDialog = ({ icon }) => {
         open={open}
         onClose={handleClose}
         PaperProps={{
-          sx: { width: { xs: '100%', sm: 400 }, backgroundColor: "#F5F5F5" },
+          sx: { width: { xs: '100%', sm: 400 }, backgroundColor: "#f5f5f5" },
         }}
       >
-        <AppBar position="static" sx={{ backgroundColor: "#1976D2" }}>
+        <AppBar position="static" sx={{ backgroundColor: "#1976d2" }}>
           <Toolbar>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
               Your Travel Cart
@@ -106,7 +142,7 @@ export const FullScreenDialog = ({ icon }) => {
                 <React.Fragment key={item.id}>
                   <ListItem
                     secondaryAction={
-                      <IconButton edge="end" aria-label="delete" onClick={()=>handleRemoveFromCart(item.id)}>
+                      <IconButton edge="end" aria-label="delete" onClick={() => handleRemoveFromCart(item.id)}>
                         <DeleteIcon />
                       </IconButton>
                     }
@@ -138,7 +174,7 @@ export const FullScreenDialog = ({ icon }) => {
               </Typography>
             )}
           </Paper>
-          <Paper elevation={3} sx={{ marginTop: 2, padding: 2, backgroundColor: '#E3F2FD' }}>
+          <Paper elevation={3} sx={{ marginTop: 2, padding: 2, backgroundColor: '#e3f2fd' }}>
             <Typography variant="h6" gutterBottom>
               Order Summary
             </Typography>
@@ -162,15 +198,15 @@ export const FullScreenDialog = ({ icon }) => {
               onChange={(e) => setCouponCode(e.target.value)}
               sx={{ marginBottom: 2 }}
             />
-            <Button
-              variant="contained"
-              fullWidth
+            <Button 
+              variant="contained" 
+              fullWidth 
               onClick={handleCheckout}
               startIcon={<AirplanemodeActiveIcon />}
               sx={{
-                backgroundColor: '#4CAF50',
+                backgroundColor: '#4caf50',
                 '&:hover': {
-                  backgroundColor: '#45A049',
+                  backgroundColor: '#45a049',
                 },
                 marginBottom: 1,
               }}
