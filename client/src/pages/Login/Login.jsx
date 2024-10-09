@@ -1,17 +1,17 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { LOGIN_USER } from "../../utils/mutation";
 import Auth from "../../utils/auth";
 import { Link } from "react-router-dom";
-import { TextField, Button, Typography, Container, Box,Grid2 as Grid } from "@mui/material";
-import "../../assets/styles/AuthForm.css";
+import { useGlobalState } from "../../utils/GlobalState";
+import { TextField, Button, Typography, Container, Box, Alert } from '@mui/material';
+import '../../assets/styles/AuthForm.css';
 
 const Login = () => {
-  const [loginFailed, setLoginFailed] = useState(false); // Add a state to track login failure
   const [formState, setFormState] = useState({ email: "", password: "" });
+  const [state, dispatch] = useGlobalState();
   const [login, { error }] = useMutation(LOGIN_USER);
-  const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -27,38 +27,23 @@ const Login = () => {
       const { data } = await login({
         variables: { ...formState },
       });
-      // Assuming the server doesn't return an error, but just no data on incorrect credentials
-      if (data && data.login && data.login.token) {
-        setLoginFailed(true);
-
-        Auth.login(data.login.token);
-        navigate("/");
-      }
-      else{
-        return setLoginFailed(true);
-      }
+      Auth.login(data.login.token);
     } catch (e) {
       console.error(e);
+      setErrorMessage("Invalid email or password. Please try again.");
     }
   };
 
   return (
     <Container className="auth-container">
       <video autoPlay loop muted className="background-video">
-        <source
-          src="/src/assets/videos/login-background.mp4"
-          type="video/mp4"
-        />
+          <source src="https://coding-videos-bucket.s3.us-east-2.amazonaws.com/login-background.mp4" type="video/mp4" />
       </video>
-      <Box
-        className="auth-form"
-        component="form"
-        onSubmit={handleFormSubmit}
-        noValidate
-      >
+      <Box className="auth-form" component="form" onSubmit={handleFormSubmit} noValidate>
         <Typography variant="h4" component="h2" gutterBottom>
           Login
         </Typography>
+        {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
         <TextField
           variant="outlined"
           margin="normal"
@@ -85,21 +70,18 @@ const Login = () => {
           value={formState.password}
           onChange={handleChange}
         />
-        <Button type="submit" fullWidth variant="contained" color="primary">
-          Submit
-        </Button>
-        <Link
-          to="/signup"
-          style={{
-            textDecoration: "none",
-            marginTop: "10px",
-            display: "block",
-            textAlign: "center",
-          }}
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          sx={{ mt: 3, mb: 2 }}
         >
-          No account? Signup
+          Login
+        </Button>
+        {error && <Typography color="error">{error.message}</Typography>}
+        <Link to="/signup">
+          Don't have an account? Sign up
         </Link>
-        {loginFailed && <Grid container justifyContent ={"center"} sx={{paddingTop:"10px"}}><Typography color="error">Invalid Credientials</Typography></Grid>}
       </Box>
     </Container>
   );

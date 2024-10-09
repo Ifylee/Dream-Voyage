@@ -1,6 +1,6 @@
 # Dream Voyage
 
-Dream Voyage is a web application designed to help users plan and book their dream vacations. The application provides a seamless experience for users to browse, select, and purchase vacation packages, with a focus on user authentication and personalized trip recommendations.
+Dream Voyage is a web application designed to help users plan and book their dream vacations. The application provides a seamless experience for browsing, selecting, and purchasing vacation packages. Focusing on user experience and worldwide adventure.
 
 ## Table of Contents
 
@@ -9,6 +9,7 @@ Dream Voyage is a web application designed to help users plan and book their dre
 - [Installation](#installation)
 - [Usage](#usage)
 - [API Endpoints](#api-endpoints)
+- [Deployed Link](#deployed-link)
 - [Contributing](#contributing)
 - [License](#license)
 - [Team](#team)
@@ -35,13 +36,15 @@ To get a local copy up and running, follow these steps:
 
 1. **Clone the repository**:
     ```sh
-    git clone https://github.com/So-Emily/Dream-Voyage
+    git clone <GitHub Repository>
     cd dream-voyage
     ```
 
 2. **Install dependencies**:
     ```sh
-    npm install
+    npm run render-build
+    or
+    npm install && npm run build
     ```
 
 3. **Set up environment variables**:
@@ -55,13 +58,8 @@ To get a local copy up and running, follow these steps:
     ```sh
     npm run seed
     ```
-    
-5. **Build the client**:
-     ```sh
-     npm run build
-     ```  
 
-6. **Start the development server**:
+5. **Start the development server**:
     ```sh
     npm run develop
     ```
@@ -146,6 +144,8 @@ To get a local copy up and running, follow these steps:
       }
     }
     ```
+## Deployed Link
+[Dream Voyage Render Link](https://dream-voyage.onrender.com)
 
 ## Contributing
 
