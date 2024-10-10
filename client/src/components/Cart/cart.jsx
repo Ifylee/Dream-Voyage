@@ -83,6 +83,13 @@ export const FullScreenDialog = ({ icon }) => {
         // Sets the message on the snackbar
         setSnackbarMessage("Get ready for your next adventure 🌎");
       }
+      else{
+        handleClose();
+        setIsSnackbarOpen(true);
+        // Sets the message on the snackbar
+        setSnackbarMessage("Must be logged in to purchase a trip");
+
+      }
     } catch (error) {
       console.log(error);
     }
