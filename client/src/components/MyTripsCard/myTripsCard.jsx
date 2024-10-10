@@ -1,49 +1,3 @@
-// import React from "react";
-// import { styled } from "@mui/material/styles";
-// import Card from "@mui/material/Card";
-// import CardHeader from "@mui/material/CardHeader";
-// import CardMedia from "@mui/material/CardMedia";
-// import IconButton from "@mui/material/IconButton";
-// import MoreVertIcon from "@mui/icons-material/MoreVert";
-// import Avatar from "@mui/material/Avatar";
-// import { red } from "@mui/material/colors";
-// import { Grid2 as Grid } from "@mui/material";
-// import Box from "@mui/material/Box";
-// const MyTripsCardStyled = styled(Card)({
-//   width: 400,
-//   height: 400,
-// });
-// export const MyTripsCard = ({ trip, title, summary, description, img, price }) => {
-//   const [expanded, setExpanded] = React.useState(false);
-//   const handleExpandClick = () => {
-//     setExpanded(!expanded);
-//   };
-//   return (
-//     <Grid size={{md:12}}>
-//       <MyTripsCardStyled>
-//         <CardHeader
-
-//           title={title}
-
-//         />
-//         <Box sx={{ height: 200, overflow: 'hidden' }}>
-//           <CardMedia
-//             component="img"
-//             image={`/images/${img}`}
-//             alt={title}
-//             sx={{
-//               width: '100%',
-//               height: '100%',
-//               objectFit: 'cover'
-//             }}
-//           />
-//         </Box>
-//         {/* Rest of your code */}
-//       </MyTripsCardStyled>
-//     </Grid>
-//   );
-// };
-
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Grid2 as Grid, Snackbar } from "@mui/material";
@@ -65,28 +19,29 @@ export const MyTripsCard = ({ id, title, img, remove }) => {
   const [expanded] = React.useState(false);
   const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  // Removes wishlist from the users account
   const [removeFromList] = useMutation(DELETE_FROM_LIST);
 
+  // Function will delete the trip that was clicked on from the users wishlist account
   const deleteWishList = async () => {
     try {
       const { data } = await removeFromList({ variables: { id } });
-      console.log(data)
       if (data.deleteFromList.wishList) {
         setIsSnackbarOpen(true);
         // Sets the message on the snackbar
         setSnackbarMessage("Deleted from List");
       }
-      console.log("Success:", data);
     } catch (err) {
       console.log(err);
     }
   };
   const navigate = useNavigate();
-
+// Redirects to a single trip page for more information about that page
   const handleImageClick = () => {
     navigate(`/trip/${id}`);
   };
   return (
+    // Cards that will show the users wishlist and purchased trips in their account
     <Grid>
       <Snackbar
         open={isSnackbarOpen}

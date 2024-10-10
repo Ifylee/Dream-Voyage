@@ -8,9 +8,12 @@ import Button from "@mui/material/Button"; // Import Button for consistent styli
 
 export const Categories = () => {
   const [state, dispatch] = useGlobalState();
+  // Destructures categories from state to be used to make buttons
   const { categories } = state;
+  // Fetches all the categories from the db
   const { loading, data: categoryData } = useQuery(QUERY_CATEGORY);
-  console.log(state);
+  // This will save all the categories to global state and if the query changes then it will
+  // update the state
   useEffect(() => {
     if (categoryData) {
       dispatch({
@@ -19,6 +22,8 @@ export const Categories = () => {
       });
     }
   }, [categoryData, loading, dispatch]);
+  // When the button is clicked then it will update the current category in the global state
+  // so that the trips can be filtered 
   const handleClick = (id) => {
     dispatch({
       type: UPDATE_CURRENT_CATEGORY,
@@ -26,11 +31,13 @@ export const Categories = () => {
     });
   };
   return (
+    // This will display all the buttons of the categories to be selected
     <Container
       maxWidth="lg"
       sx={{ display: "flex", justifyContent: "center", marginBottom: 2, marginTop: 2 }}
     >
       <div>
+        {/* This will reset the categories to display all trips */}
         <Button
           variant="contained"
           onClick={() => {
@@ -45,6 +52,7 @@ export const Categories = () => {
         >
           All Trips
         </Button>
+        {/* This will display all the categories from state as buttons */}
         {categories.map((item) => (
           <Button
             key={item._id}

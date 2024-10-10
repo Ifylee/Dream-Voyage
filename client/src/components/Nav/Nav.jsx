@@ -59,8 +59,8 @@ export const Nav = () => {
           {/* This will hold the name in the navbar at the far left */}
           <h2
             style={{
-              fontFamily: "'Playfair Display', sans-serif",
-              fontWeight: 400,
+              fontFamily: "'Dancing Script', cursive",
+              fontWeight: 2000,
             }}
             onClick={() => navigate("/")}
           >
@@ -75,7 +75,7 @@ export const Nav = () => {
             value={value}
             // This will hanlde the change of pages when a tab is selected
             onChange={handleChange}
-            // variant="scrollable"
+            variant="scrollable"
             scrollButtons="auto"
             aria-label="scrollable auto tabs example"
             TabIndicatorProps={{ style: { display: "none" } }} // Remove underline indicator

@@ -1,5 +1,6 @@
 import { gql } from "@apollo/client";
 
+// Fetches all the trips and the corresponding data from the db
 export const QUERY_ALL_TRIPS = gql`
   query AllTrips {
     allTrips {
@@ -17,6 +18,7 @@ export const QUERY_ALL_TRIPS = gql`
   }
 `;
 
+// Fetches all the categories along with its name from the db
 export const QUERY_CATEGORY = gql`
   query Categories {
     categories {
@@ -26,6 +28,7 @@ export const QUERY_CATEGORY = gql`
   }
 `;
 
+// Finds the current users that is logged in information
 export const CURRENT_USER = gql`
   query CurrentUser {
     currentUser {
@@ -57,6 +60,7 @@ export const CURRENT_USER = gql`
   }
 `;
 
+// This takes a parameter of a trips id and will return the data that corresponds to it
 export const ONE_TRIP = gql`
   query OneTrip($id: ID!) {
     oneTrip(_id: $id) {
