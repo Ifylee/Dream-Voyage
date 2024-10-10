@@ -26,7 +26,6 @@ export const TripCard = ({ id, title, description, img, price }) => {
   const [state, dispatch] = useGlobalState();
   const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-  console.log(state);
   const [addList] = useMutation(ADD_WISH_LIST);
 // This will add the trip to the cart using the reducer
   const addToCart = async () => {
