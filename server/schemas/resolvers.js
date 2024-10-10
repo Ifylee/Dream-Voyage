@@ -1,6 +1,6 @@
 const { User, Trip, Category } = require("../models");
-const { password } = require("../models/User");
 const { signToken, AuthenticationError } = require("../utils/auth");
+const stripe = require('stripe')('pk_test_TYooMQauvdEDq54NiTphI7jx');
 
 const resolvers = {
   Query: {
@@ -21,6 +21,36 @@ const resolvers = {
     },
     oneTrip: async (parent, { _id }) => {
       return Trip.findById(_id);
+    },
+    checkout: async (parent, args, context) => {
+      const url = new URL(context.headers.referer).origin;
+      const line_items = [];
+
+      for (const productId of args.products) {
+        const product = await Trip.findById(productId);
+
+        line_items.push({
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: product.title,
+              images: [`${url}/images/${product.img}`]
+            },
+            unit_amount: product.price * 100,
+          },
+          quantity: 1
+        });
+      }
+
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ['card'],
+        line_items,
+        mode: 'payment',
+        success_url: `${url}/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${url}/`
+      });
+
+      return { session: session.id };
     },
   },
 

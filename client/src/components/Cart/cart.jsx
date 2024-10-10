@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { BOUGHT_TRIP } from "../../utils/mutation";
@@ -17,6 +18,7 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
+
 import AirplanemodeActiveIcon from "@mui/icons-material/AirplanemodeActive";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -34,10 +36,12 @@ import LinearProgress from "@mui/material/LinearProgress";
 import Auth from "../../utils/auth";
 const stripePromise = loadStripe("your_stripe_publishable_key");
 
+
 export const FullScreenDialog = ({ icon }) => {
   const [loading, setLoading] = useState(false); // state for tracking loader
   const [open, setOpen] = useState(false);
   const [state, dispatch] = useGlobalState();
+
   // This mutation will add a trip to their account as a purchased one
   const [checkoutTrips] = useMutation(BOUGHT_TRIP);
   // These two states will open the snackabar and set the message for it
@@ -56,18 +60,21 @@ export const FullScreenDialog = ({ icon }) => {
   // This will remove the item from the cart using the id
   const handleRemoveFromCart = (id) => {
     dispatch({
-      type: REMOVE_TRIP_FROM_CART,
+      type: "REMOVE_TRIP_FROM_CART",
       payload: id,
     });
   };
+
   const handleUpdateQuantity = (id, change) => {
     dispatch({
       type: "UPDATE_CART_QUANTITY",
       payload: { id, change },
     });
   };
+
   const handleCheckout = async () => {
     try {
+
       const { data } = await createCheckoutSession({
         variables: { items: state.cart.map((item) => item.id) },
       });
@@ -75,14 +82,14 @@ export const FullScreenDialog = ({ icon }) => {
       const result = await stripe.redirectToCheckout({
         sessionId: data.createCheckoutSession.sessionId,
       });
-      if (result.error) {
-        console.error(result.error);
-      }
+  
     } catch (error) {
       console.error("Error creating checkout session:", error);
     }
   };
+
   // This reducer will clear the cart when the button is clicked
+
   const handleClearCart = () => {
     dispatch({ type: CLEAR_CART });
   };
@@ -121,10 +128,12 @@ export const FullScreenDialog = ({ icon }) => {
     }
   };
 
+
   // Calculates the total for the items in cart
   const subtotal = state.cart.reduce((acc, item) => acc + item.price, 0);
   const tax = subtotal * 0.1; // Assuming 10% tax
   const total = subtotal + tax;
+
   return (
     <React.Fragment>
       <IconButton color="inherit" onClick={handleClickOpen}>
@@ -137,10 +146,11 @@ export const FullScreenDialog = ({ icon }) => {
         open={open}
         onClose={handleClose}
         PaperProps={{
+
           sx: { width: { xs: "100%", sm: 400 }, backgroundColor: "#F5F5F5" },
         }}
       >
-        <AppBar position="static" sx={{ backgroundColor: "#1976D2" }}>
+        <AppBar position="static" sx={{ backgroundColor: "#1976d2" }}>
           <Toolbar>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
               Your Travel Cart
@@ -175,13 +185,14 @@ export const FullScreenDialog = ({ icon }) => {
                 <React.Fragment key={item.id}>
                   <ListItem
                     secondaryAction={
+
                       <IconButton
                         edge="end"
                         aria-label="delete"
                         // Removes the item from the cart
                         onClick={() => handleRemoveFromCart(item.id)}
                       >
-                        <DeleteIcon />
+
                       </IconButton>
                     }
                   >
@@ -224,6 +235,7 @@ export const FullScreenDialog = ({ icon }) => {
               </Typography>
             )}
           </Paper>
+
           <Paper
             elevation={3}
             sx={{ marginTop: 2, padding: 2, backgroundColor: "#E3F2FD" }}
@@ -269,6 +281,7 @@ export const FullScreenDialog = ({ icon }) => {
               onChange={(e) => setCouponCode(e.target.value)}
               sx={{ marginBottom: 2 }}
             />
+
             {/* Checkout button will call the checkout function to add trips to users account */}
             <Button
               variant="contained"

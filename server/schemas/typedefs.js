@@ -38,6 +38,10 @@ type Auth {
 }
 
 
+type Checkout {
+    session: ID
+}
+
 type Query {
 
     allUsers:[User]
@@ -45,6 +49,7 @@ type Query {
     categories:[Category]
     allTrips:[Trip]
     oneTrip(_id:ID!):Trip
+    checkout(products: [ID]!): Checkout
 
 }
 
