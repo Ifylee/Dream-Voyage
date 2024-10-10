@@ -19,28 +19,29 @@ export const MyTripsCard = ({ id, title, img, remove }) => {
   const [expanded] = React.useState(false);
   const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  // Removes wishlist from the users account
   const [removeFromList] = useMutation(DELETE_FROM_LIST);
 
+  // Function will delete the trip that was clicked on from the users wishlist account
   const deleteWishList = async () => {
     try {
       const { data } = await removeFromList({ variables: { id } });
-      console.log(data)
       if (data.deleteFromList.wishList) {
         setIsSnackbarOpen(true);
         // Sets the message on the snackbar
         setSnackbarMessage("Deleted from List");
       }
-      console.log("Success:", data);
     } catch (err) {
       console.log(err);
     }
   };
   const navigate = useNavigate();
-
+// Redirects to a single trip page for more information about that page
   const handleImageClick = () => {
     navigate(`/trip/${id}`);
   };
   return (
+    // Cards that will show the users wishlist and purchased trips in their account
     <Grid>
       <Snackbar
         open={isSnackbarOpen}

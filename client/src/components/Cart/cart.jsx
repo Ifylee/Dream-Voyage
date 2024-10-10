@@ -20,26 +20,40 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AirplanemodeActiveIcon from "@mui/icons-material/AirplanemodeActive";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { Box, Divider, Paper, Badge, TextField, Snackbar,Grid2 as Grid } from "@mui/material";
+import {
+  Box,
+  Divider,
+  Paper,
+  Badge,
+  TextField,
+  Snackbar,
+  Grid2 as Grid,
+} from "@mui/material";
 import { REMOVE_TRIP_FROM_CART, CLEAR_CART } from "../../utils/actions";
-import LinearProgress from '@mui/material/LinearProgress';import Auth from "../../utils/auth";
+import LinearProgress from "@mui/material/LinearProgress";
+import Auth from "../../utils/auth";
 const stripePromise = loadStripe("your_stripe_publishable_key");
 
 export const FullScreenDialog = ({ icon }) => {
   const [loading, setLoading] = useState(false); // state for tracking loader
   const [open, setOpen] = useState(false);
   const [state, dispatch] = useGlobalState();
+  // This mutation will add a trip to their account as a purchased one
   const [checkoutTrips] = useMutation(BOUGHT_TRIP);
+  // These two states will open the snackabar and set the message for it
   const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   // const [createCheckoutSession] = useMutation(CREATE_CHECKOUT_SESSION);
   const [couponCode, setCouponCode] = React.useState("");
+  // Handles the opening of the cart
   const handleClickOpen = () => {
     setOpen(true);
   };
+  // Handles the closing of the cart
   const handleClose = () => {
     setOpen(false);
   };
+  // This will remove the item from the cart using the id
   const handleRemoveFromCart = (id) => {
     dispatch({
       type: REMOVE_TRIP_FROM_CART,
@@ -68,15 +82,22 @@ export const FullScreenDialog = ({ icon }) => {
       console.error("Error creating checkout session:", error);
     }
   };
+  // This reducer will clear the cart when the button is clicked
   const handleClearCart = () => {
     dispatch({ type: CLEAR_CART });
   };
 
+  // This will perform the mock transaction
   const checkout = async () => {
     try {
+      // If cart is not empty from state and the user is logged in then
+      // user can purchase a trip
       if (state.cart && Auth.loggedIn()) {
+        // This state will engage the loader
         setLoading(true);
         setTimeout(() => {
+          // Performs the mutation to add all the trips that are in the cart
+          // to be added to the users account
           setLoading(false); // Stop loading after 3 seconds
           state.cart.forEach(async (trip) => {
             const { data } = await checkoutTrips({
@@ -92,7 +113,7 @@ export const FullScreenDialog = ({ icon }) => {
       } else {
         handleClose();
         setIsSnackbarOpen(true);
-        // Sets the message on the snackbar
+        // Sets the message on the snackbar if the user is not logged in
         setSnackbarMessage("Must be logged in to purchase a trip");
       }
     } catch (error) {
@@ -100,6 +121,7 @@ export const FullScreenDialog = ({ icon }) => {
     }
   };
 
+  // Calculates the total for the items in cart
   const subtotal = state.cart.reduce((acc, item) => acc + item.price, 0);
   const tax = subtotal * 0.1; // Assuming 10% tax
   const total = subtotal + tax;
@@ -146,6 +168,9 @@ export const FullScreenDialog = ({ icon }) => {
             sx={{ padding: 2, flexGrow: 1, overflow: "auto" }}
           >
             <List>
+              {/* This will take all things from the cart in state
+              and place them inside  the cart so that the 
+              user can see what they are about to purchase */}
               {state.cart.map((item, index) => (
                 <React.Fragment key={item.id}>
                   <ListItem
@@ -153,6 +178,7 @@ export const FullScreenDialog = ({ icon }) => {
                       <IconButton
                         edge="end"
                         aria-label="delete"
+                        // Removes the item from the cart
                         onClick={() => handleRemoveFromCart(item.id)}
                       >
                         <DeleteIcon />
@@ -187,6 +213,7 @@ export const FullScreenDialog = ({ icon }) => {
                 </React.Fragment>
               ))}
             </List>
+            {/* If the cart is empty then a message will be displayed saying it's empty */}
             {state.cart.length === 0 && (
               <Typography
                 variant="subtitle1"
@@ -242,6 +269,7 @@ export const FullScreenDialog = ({ icon }) => {
               onChange={(e) => setCouponCode(e.target.value)}
               sx={{ marginBottom: 2 }}
             />
+            {/* Checkout button will call the checkout function to add trips to users account */}
             <Button
               variant="contained"
               fullWidth
@@ -257,7 +285,8 @@ export const FullScreenDialog = ({ icon }) => {
             >
               Proceed to Checkout
             </Button>
-            {loading &&  <LinearProgress color="success" />}
+            {/* If loading is true during the buying process then the loader will appear */}
+            {loading && <LinearProgress color="success" />}
 
             <Button
               variant="outlined"
@@ -273,6 +302,7 @@ export const FullScreenDialog = ({ icon }) => {
           </Paper>
         </Box>
       </Drawer>
+      {/* Snackbar will pop up for the user to display the certain message */}
       <Snackbar
         open={isSnackbarOpen}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}

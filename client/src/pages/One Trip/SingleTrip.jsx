@@ -21,18 +21,18 @@ import Auth from "../../utils/auth";
 
 export const SingleTrip = () => {
   const [state, dispatch] = useGlobalState();
+  // This mutation will add the trip to the users wishlist
   const [addList] = useMutation(ADD_WISH_LIST);
+  // This will pull the wild card from the link to be used to find the specific trip
   const { id } = useParams();
   const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
 
+  // This query will find a specific trip using the wildcard
   const { data, error, loading } = useQuery(ONE_TRIP, {
     variables: { id }, // Pass the variable here
   });
 
-  useEffect(() => {
-    sessionStorage.removeItem("selectedTab");
-  }, [data]);
 
   if (loading) return <p>Loading...</p>;
 
@@ -44,9 +44,10 @@ export const SingleTrip = () => {
     return <p>No trip data found</p>;
   }
 
+  // Destructure the data that will be needed for the Trip card
   const { title, img, price, additionalImages, groupSize, description } =
     data.oneTrip;
-
+// This will use a reducer to add the trip to the cart
   const addToCart = async () => {
     dispatch({
       type: ADD_TRIP_TO_CART,
@@ -55,9 +56,9 @@ export const SingleTrip = () => {
     setIsSnackbarOpen(true);
     // Sets the message on the snackbar
     setSnackbarMessage("Trip added to cart!");
-    console.log("test");
   };
 
+  // This will add the trip to the users wishlist using the mutation function
   const addWishTrip = async () => {
     try {
       const { data } = await addList({ variables: { id } });
@@ -66,7 +67,6 @@ export const SingleTrip = () => {
         // Sets the message on the snackbar
         setSnackbarMessage("Added to wishlist!");
       }
-      console.log("Success:", data);
     } catch (err) {
       console.log(err);
     }
@@ -84,6 +84,7 @@ export const SingleTrip = () => {
                 style={{ height: "400px", objectFit: "cover" }}
               />
             </div>
+            {/* The images will be added to the carousel */}
             {additionalImages &&
               additionalImages.map((img, index) => (
                 <div key={index}>
@@ -96,6 +97,7 @@ export const SingleTrip = () => {
               ))}
           </Carousel>
         </Grid>
+        {/* THis card will display all the information about the trip */}
         <Grid item xs={12}>
           <Box sx={{ textAlign: "center", padding: 2 }}>
             <Typography variant="h2" component="h1" gutterBottom>
@@ -113,9 +115,11 @@ export const SingleTrip = () => {
             <Box
               sx={{ display: "flex", justifyContent: "center", marginTop: 2 }}
             >
+              {/* This button will add trip to the users wishlist */}
               <IconButton aria-label="add to favorites" onClick={addWishTrip}>
                 <FavoriteIcon />
               </IconButton>
+              {/* This button will add a trip to the cart */}
               <IconButton aria-label="add to cart" onClick={addToCart}>
                 <ShoppingCartIcon />
               </IconButton>
@@ -123,6 +127,7 @@ export const SingleTrip = () => {
           </Box>
         </Grid>
       </Grid>
+      {/* Display a message when the user adds to cart or wishlist */}
       <Snackbar
         open={isSnackbarOpen}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}

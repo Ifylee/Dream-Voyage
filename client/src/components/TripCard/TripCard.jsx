@@ -28,7 +28,7 @@ export const TripCard = ({ id, title, description, img, price }) => {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   console.log(state);
   const [addList] = useMutation(ADD_WISH_LIST);
-
+// This will add the trip to the cart using the reducer
   const addToCart = async () => {
     dispatch({
       type: ADD_TRIP_TO_CART,
@@ -37,9 +37,9 @@ export const TripCard = ({ id, title, description, img, price }) => {
     setIsSnackbarOpen(true);
     // Sets the message on the snackbar
     setSnackbarMessage("Trip added to cart!");
-    console.log("test");
   };
 
+  // This function will add the trip to the users wishlist account 
   const addWishTrip = async () => {
     try {
       const { data } = await addList({ variables: { id } });
@@ -48,17 +48,19 @@ export const TripCard = ({ id, title, description, img, price }) => {
         // Sets the message on the snackbar
         setSnackbarMessage("Added to wishlist!");
       }
-      console.log("Success:", data);
     } catch (err) {
       console.log(err);
     }
   };
+  // This will be used to redirect the user to certain page
   const navigate = useNavigate();
 
+  // This function will redirect user to a single trip page for more information
   const handleImageClick = () => {
     navigate(`/trip/${id}`);
   };
   return (
+    // This will display all the information of the trip in a card
     <Grid>
       <Snackbar
         open={isSnackbarOpen}
@@ -82,6 +84,7 @@ export const TripCard = ({ id, title, description, img, price }) => {
           height="194"
           src={`/images/${img}`}
           alt={title}
+          // {/* Redirects to single trip page */}
           onClick={handleImageClick}
           style={{ cursor: "pointer" }}
         />
@@ -100,7 +103,7 @@ export const TripCard = ({ id, title, description, img, price }) => {
           {/* Spacer to push the button to the end */}
           <Box sx={{ flexGrow: 1 }} />
 
-          {/* New button at the end */}
+          {/* Redirects to single trip page */}
           <IconButton aria-label="settings" onClick={handleImageClick}>
             <InfoIcon />
           </IconButton>
