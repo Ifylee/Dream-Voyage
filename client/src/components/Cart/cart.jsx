@@ -20,12 +20,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AirplanemodeActiveIcon from "@mui/icons-material/AirplanemodeActive";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { Box, Divider, Paper, Badge, TextField, Snackbar } from "@mui/material";
+import { Box, Divider, Paper, Badge, TextField, Snackbar,Grid2 as Grid } from "@mui/material";
 import { REMOVE_TRIP_FROM_CART, CLEAR_CART } from "../../utils/actions";
-import Auth from "../../utils/auth";
+import LinearProgress from '@mui/material/LinearProgress';import Auth from "../../utils/auth";
 const stripePromise = loadStripe("your_stripe_publishable_key");
 
 export const FullScreenDialog = ({ icon }) => {
+  const [loading, setLoading] = useState(false); // state for tracking loader
   const [open, setOpen] = useState(false);
   const [state, dispatch] = useGlobalState();
   const [checkoutTrips] = useMutation(BOUGHT_TRIP);
@@ -74,21 +75,25 @@ export const FullScreenDialog = ({ icon }) => {
   const checkout = async () => {
     try {
       if (state.cart && Auth.loggedIn()) {
-        state.cart.forEach(async (trip) => {
-          const { data } = await checkoutTrips({ variables: { id: trip.id } });
-        });
-        handleClearCart();
-        handleClose();
-        setIsSnackbarOpen(true);
-        // Sets the message on the snackbar
-        setSnackbarMessage("Get ready for your next adventure 🌎");
-      }
-      else{
+        setLoading(true);
+        setTimeout(() => {
+          setLoading(false); // Stop loading after 3 seconds
+          state.cart.forEach(async (trip) => {
+            const { data } = await checkoutTrips({
+              variables: { id: trip.id },
+            });
+          });
+          handleClearCart();
+          handleClose();
+          setIsSnackbarOpen(true);
+          // Sets the message on the snackbar
+          setSnackbarMessage("Get ready for your next adventure 🌎");
+        }, 3000);
+      } else {
         handleClose();
         setIsSnackbarOpen(true);
         // Sets the message on the snackbar
         setSnackbarMessage("Must be logged in to purchase a trip");
-
       }
     } catch (error) {
       console.log(error);
@@ -252,6 +257,8 @@ export const FullScreenDialog = ({ icon }) => {
             >
               Proceed to Checkout
             </Button>
+            {loading &&  <LinearProgress color="success" />}
+
             <Button
               variant="outlined"
               fullWidth
