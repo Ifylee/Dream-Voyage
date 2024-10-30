@@ -21,9 +21,10 @@
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^6.1.4",
-    "@mui/material": "^6.1.4",
+    "@mui/material": "^6.1.1",
     "apollo-server-express": "^3.13.0",
     "graphql": "^16.9.0",
-    "mongoose": "^8.7.1"
+    "mongoose": "^8.7.1",
+    "react-responsive-carousel": "^3.2.23"
   }
 }
